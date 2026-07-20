@@ -1,0 +1,20 @@
+.github
+
+# Environment
+.env
+
+# Maven
+backend/target/
+
+# Node
+frontend/student-app-frontend/node_modules/
+frontend/student-app-frontend/dist/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+NOTES.md
+
+.DS_Store
