@@ -46,7 +46,7 @@ public class User {
     }
 
     // Constructor
-    private User(String email, String password, Role role, Boolean isActive, LocalDateTime createdAt,
+    public User(String email, String password, Role role, Boolean isActive, LocalDateTime createdAt,
             LocalDateTime updatedAt) {
         this.email = email;
         this.password = password;
