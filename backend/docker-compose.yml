@@ -1,6 +1,14 @@
 # version: '3.8'
 
 services:
+
+  frontend:
+    image: nginx:alpine
+    ports:
+      - "${FRONTEND_PORT:-8081}:80"
+    volumes: 
+    - ./frontend/student-app-frontend:/usr/share/nginx/html:ro
+
   mysql:
     image: mysql:8.0
     container_name: student_db
