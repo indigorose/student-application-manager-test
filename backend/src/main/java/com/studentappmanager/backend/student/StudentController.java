@@ -1,6 +1,7 @@
 package com.studentappmanager.backend.student;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -24,6 +25,12 @@ public class StudentController {
 
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
+    }
+
+    // List all students
+    @GetMapping("")
+    public ResponseEntity<List<Student>> getAllUsers() {
+        return ResponseEntity.ok(studentService.getAllStudents());
     }
 
     // Create(POST) add new student

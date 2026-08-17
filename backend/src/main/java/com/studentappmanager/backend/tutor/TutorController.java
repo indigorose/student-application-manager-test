@@ -1,5 +1,6 @@
 package com.studentappmanager.backend.tutor;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -24,7 +25,13 @@ public class TutorController {
         this.tutorService = tutorService;
     }
 
-    // Create(POST) add new student
+    // Get all the tutors
+    @GetMapping()
+    public ResponseEntity<List<Tutor>> getAllTutors() {
+        return ResponseEntity.ok(tutorService.getAllTutors());
+    }
+
+    // Create(POST) add new tutor
     @PostMapping("/{userId}")
     public ResponseEntity<Tutor> create(@PathVariable Long userId, @RequestBody TutorRequest request) {
         try {
@@ -38,7 +45,7 @@ public class TutorController {
         }
     }
 
-    // Get single student by id
+    // Get single tutor by id
     @GetMapping("/{userId}")
     public Tutor get(@PathVariable Long userId) {
         try {

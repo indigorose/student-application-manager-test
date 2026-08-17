@@ -1,6 +1,7 @@
 package com.studentappmanager.backend.student;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
@@ -18,10 +19,18 @@ public class StudentService {
         this.userRepository = userRepository;
     };
 
+    // List all students
+    public List<Student> getAllStudents() {
+        return studentRepository.findAll();
+    }
+
     // Create Student
 
     public Student createStudentProfile(Long userId, String firstName, String lastName,
             LocalDate dob, String phone, String address) {
+        if (studentRepository.findByUserId(userId).isPresent()) {
+            throw new IllegalStateException("Student profile already exists for user " + userId);
+        }
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("No user with id " + userId));
 

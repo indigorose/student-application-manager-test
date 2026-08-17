@@ -7,12 +7,20 @@ import java.util.NoSuchElementException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
+import com.studentappmanager.backend.student.StudentRepository;
+import com.studentappmanager.backend.tutor.TutorRepository;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final TutorRepository tutorRepository;
+    private final StudentRepository studentRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, TutorRepository tutorRepository,
+            StudentRepository studentRepository) {
         this.userRepository = userRepository;
+        this.tutorRepository = tutorRepository;
+        this.studentRepository = studentRepository;
     }
 
     // List all the users
@@ -54,10 +62,13 @@ public class UserService {
 
     // Delete a User
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new NoSuchElementException("User not found with id: " + id);
-        }
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found with id: " + id));
+
+        studentRepository.findByUserId(id).ifPresent(studentRepository::delete);
+        tutorRepository.findByUserId(id).ifPresent(tutorRepository::delete);
+
+        userRepository.delete(user);
     }
 
 }

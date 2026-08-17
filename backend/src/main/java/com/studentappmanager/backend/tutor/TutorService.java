@@ -1,5 +1,6 @@
 package com.studentappmanager.backend.tutor;
 
+import java.util.List;
 // import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
@@ -18,9 +19,19 @@ public class TutorService {
         this.userRepository = userRepository;
     };
 
+    // List all tutors
+    public List<Tutor> getAllTutors() {
+        return tutorRepository.findAll();
+    }
+
     // Create Tutor
 
     public Tutor createStudentProfile(Long userId, String firstName, String lastName, String department) {
+
+        if (tutorRepository.findByUserId(userId).isPresent()) {
+            throw new IllegalStateException("Tutor profile already exists for user " + userId);
+        }
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("No user with id " + userId));
 
