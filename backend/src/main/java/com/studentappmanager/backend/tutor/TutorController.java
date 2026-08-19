@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,9 +34,9 @@ public class TutorController {
 
     // Create(POST) add new tutor
     @PostMapping("/{userId}")
-    public ResponseEntity<Tutor> create(@PathVariable Long userId, @RequestBody TutorRequest request) {
+    public ResponseEntity<Tutor> createTutorProfile(@PathVariable Long userId, @RequestBody TutorRequest request) {
         try {
-            Tutor tutor = tutorService.createStudentProfile(
+            Tutor tutor = tutorService.createTutorProfile(
                     userId, request.firstName(), request.lastName(), request.department());
             return ResponseEntity.ok(tutor);
         } catch (IllegalArgumentException e) {
@@ -47,9 +48,19 @@ public class TutorController {
 
     // Get single tutor by id
     @GetMapping("/{userId}")
-    public Tutor get(@PathVariable Long userId) {
+    public Tutor getTutor(@PathVariable Long userId) {
         try {
             return tutorService.getByUserId(userId);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    // Update(PUT) a single Tutor
+    @PutMapping("/{id}")
+    public Tutor updateTutor(@PathVariable Long id, @RequestBody Tutor updatedTutor) {
+        try {
+            return tutorService.updateTutor(id, updatedTutor);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

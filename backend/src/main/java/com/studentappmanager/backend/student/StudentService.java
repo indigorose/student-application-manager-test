@@ -24,7 +24,12 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    // Create Student
+    // Find a single Tutor by id
+    public Student getByUserId(Long userId) {
+        return studentRepository.findByUserId(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found with id: " + userId));
+    }
+    // Create a Student
 
     public Student createStudentProfile(Long userId, String firstName, String lastName,
             LocalDate dob, String phone, String address) {
@@ -38,9 +43,17 @@ public class StudentService {
         return studentRepository.save(student);
     }
 
-    public Student getByUserId(Long userId) {
-        return studentRepository.findByUserId(userId)
-                .orElseThrow(() -> new NoSuchElementException("User not found with id: " + userId));
+    // Update a Student
+    public Student updateStudent(Long id, Student updatedStudent) {
+        Student existingStudent = studentRepository.findById(id).orElseThrow(() -> new NoSuchElementException(
+                "student not found with id: " + id));
+        existingStudent.setUser(updatedStudent.getUser());
+        existingStudent.setFirstName(updatedStudent.getFirstName());
+        existingStudent.setLastName(updatedStudent.getLastName());
+        existingStudent.setDob(updatedStudent.getDob());
+        existingStudent.setPhone(updatedStudent.getPhone());
+        existingStudent.setAddress(updatedStudent.getAddress());
+        return studentRepository.save(existingStudent);
     }
 
 }

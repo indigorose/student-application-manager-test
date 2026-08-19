@@ -24,9 +24,14 @@ public class TutorService {
         return tutorRepository.findAll();
     }
 
-    // Create Tutor
+    // Get Tutor by id
+    public Tutor getByUserId(Long userId) {
+        return tutorRepository.findByUserId(userId)
+                .orElseThrow(() -> new NoSuchElementException("Tutor not found with id: " + userId));
+    }
 
-    public Tutor createStudentProfile(Long userId, String firstName, String lastName, String department) {
+    // Create Tutor
+    public Tutor createTutorProfile(Long userId, String firstName, String lastName, String department) {
 
         if (tutorRepository.findByUserId(userId).isPresent()) {
             throw new IllegalStateException("Tutor profile already exists for user " + userId);
@@ -39,9 +44,15 @@ public class TutorService {
         return tutorRepository.save(tutor);
     }
 
-    public Tutor getByUserId(Long userId) {
-        return tutorRepository.findByUserId(userId)
-                .orElseThrow(() -> new NoSuchElementException("User not found with id: " + userId));
+    // Update a tutor
+    public Tutor updateTutor(Long id, Tutor updatedTutor) {
+        Tutor existingTutor = tutorRepository.findById(id).orElseThrow(() -> new NoSuchElementException(
+                "Tutor not found with id: " + id));
+        existingTutor.setUser(updatedTutor.getUser());
+        existingTutor.setFirstName(updatedTutor.getFirstName());
+        existingTutor.setLastName(updatedTutor.getLastName());
+        existingTutor.setDepartment(updatedTutor.getDepartment());
+        return tutorRepository.save(existingTutor);
     }
 
 }

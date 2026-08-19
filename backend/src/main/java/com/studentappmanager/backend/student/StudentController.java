@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +29,7 @@ public class StudentController {
     }
 
     // List all students
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<Student>> getAllUsers() {
         return ResponseEntity.ok(studentService.getAllStudents());
     }
@@ -52,6 +53,16 @@ public class StudentController {
     public Student get(@PathVariable Long userId) {
         try {
             return studentService.getByUserId(userId);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    // Update(PUT) a single Student
+    @PutMapping("/{id}")
+    public Student updateStudent(@PathVariable Long id, @RequestBody Student updatedStudent) {
+        try {
+            return studentService.updateStudent(id, updatedStudent);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
