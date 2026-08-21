@@ -57,7 +57,7 @@ public class TutorController {
     }
 
     // Update(PUT) a single Tutor
-    @PutMapping("/{id}")
+    @PutMapping("/{userId}")
     public Tutor updateTutor(@PathVariable Long id, @RequestBody Tutor updatedTutor) {
         try {
             return tutorService.updateTutor(id, updatedTutor);

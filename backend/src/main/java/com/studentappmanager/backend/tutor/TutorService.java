@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 
+import com.studentappmanager.backend.user.Role;
 import com.studentappmanager.backend.user.User;
 import com.studentappmanager.backend.user.UserRepository;
 
@@ -40,14 +41,20 @@ public class TutorService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("No user with id " + userId));
 
+        if (user.getRole() != Role.TUTOR) {
+            throw new IllegalStateException("User " + userId + " has role " + user.getRole() + " expected TUTOR.");
+        }
+
         Tutor tutor = new Tutor(user, firstName, lastName, department);
         return tutorRepository.save(tutor);
     }
 
     // Update a tutor
-    public Tutor updateTutor(Long id, Tutor updatedTutor) {
-        Tutor existingTutor = tutorRepository.findById(id).orElseThrow(() -> new NoSuchElementException(
-                "Tutor not found with id: " + id));
+    public Tutor updateTutor(Long userId, Tutor updatedTutor) {
+        Tutor existingTutor = tutorRepository.findById(
+                userId).orElseThrow(
+                        () -> new NoSuchElementException(
+                                "Tutor not found with id: " + userId));
         existingTutor.setUser(updatedTutor.getUser());
         existingTutor.setFirstName(updatedTutor.getFirstName());
         existingTutor.setLastName(updatedTutor.getLastName());
