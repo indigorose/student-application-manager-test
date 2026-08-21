@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 
+import com.studentappmanager.backend.user.Role;
 import com.studentappmanager.backend.user.User;
 import com.studentappmanager.backend.user.UserRepository;
 
@@ -39,6 +40,9 @@ public class StudentService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("No user with id " + userId));
 
+        if (user.getRole() != Role.STUDENT) {
+            throw new IllegalStateException("User " + userId + " has role " + user.getRole() + " expected STUDENT.");
+        }
         Student student = new Student(user, firstName, lastName, dob, phone, address);
         return studentRepository.save(student);
     }
