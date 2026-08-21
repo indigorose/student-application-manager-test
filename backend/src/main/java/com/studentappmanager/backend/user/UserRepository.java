@@ -10,7 +10,7 @@ public interface UserRepository extends ListCrudRepository<User, Long> {
     Optional<User> findById(Long id);
 
     // Find by email method
-    List<User> findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
     // Find by role
     List<User> findByRole(Role role);

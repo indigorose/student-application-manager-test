@@ -1,9 +1,6 @@
 package com.studentappmanager.backend.user;
 
-// import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
-// import javax.swing.text.StyledEditorKit.BoldAction;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +9,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
@@ -46,14 +45,11 @@ public class User {
     }
 
     // Constructor
-    public User(String email, String password, Role role, Boolean isActive, LocalDateTime createdAt,
-            LocalDateTime updatedAt) {
+    public User(String email, String password, Role role, Boolean isActive) {
         this.email = email;
         this.password = password;
         this.role = role;
         this.isActive = isActive;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     };
 
     // Getters and Setters
@@ -98,16 +94,19 @@ public class User {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
 }

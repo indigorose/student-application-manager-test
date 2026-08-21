@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @CrossOrigin // H
 @RestController
@@ -42,6 +43,22 @@ public class UserController {
     public User getUser(@PathVariable Long id) {
         try {
             return userService.getUser(id);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    // Get users by role
+    @GetMapping(params = "role")
+    public ResponseEntity<List<User>> getByRole(@RequestParam Role role) {
+        return ResponseEntity.ok(userService.getUsersByRole(role));
+    }
+
+    // Get user by email
+    @GetMapping(params = "email")
+    public User getByEmail(@RequestParam String email) {
+        try {
+            return userService.getUserByEmail(email);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

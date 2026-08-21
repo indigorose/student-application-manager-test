@@ -28,16 +28,22 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    // List users by role
+    public List<User> getUsersByRole(Role role) {
+        return userRepository.findByRole(role);
+    }
+
+    // Find user by email
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("User not found with email: " + email));
+    }
+
     // Find a single user by id
     public User getUser(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found with id: " + id));
     }
-
-    // Find by single email
-    // public User getUserByEmailUser(String email) {
-    // return userRepository.findByEmail(email);
-    // }
 
     // Create a User
     public User createUser(User user) {
@@ -50,13 +56,12 @@ public class UserService {
         }
     }
 
-    // Update a User email and password
+    // Update a user email and password
     public User updateUser(Long id, User updatedUser) {
         User existingUser = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException(
                 "User not found with id:" + id));
         existingUser.setEmail(updatedUser.getEmail());
-        // existingUser.setPassword(updatedUser.getPassword());
-        existingUser.setUpdatedAt(updatedUser.getUpdatedAt());
+        existingUser.setPassword(updatedUser.getPassword());
         return userRepository.save(existingUser);
     }
 
