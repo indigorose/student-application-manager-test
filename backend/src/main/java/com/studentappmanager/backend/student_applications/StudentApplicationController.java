@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.studentappmanager.backend.course.Course;
-import com.studentappmanager.backend.student.Student;
+import com.studentappmanager.backend.student_applications.StudentApplicationService.StatusUpdateRequest;
+import com.studentappmanager.backend.student_applications.StudentApplicationService.StudentApplicationRequest;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @CrossOrigin
 @RestController
@@ -36,8 +37,20 @@ public class StudentApplicationController {
         return ResponseEntity.ok(studentApplicationService.getAllStudentApplications());
     }
 
-    // Get a single student applications by student applications id
-    @GetMapping("/{id}")
+    // Get List of applications by student Id
+    @GetMapping(params = "studentUserId")
+    public ResponseEntity<List<StudentApplication>> getByStudent(@RequestParam Long studentUserId) {
+        return ResponseEntity.ok(studentApplicationService.getStudentApplicationsByStudent(studentUserId));
+    }
+
+    // Get list of applications by course id
+    @GetMapping(params = "courseId")
+    public ResponseEntity<List<StudentApplication>> getByCourse(@RequestParam Long courseId) {
+        return ResponseEntity.ok(studentApplicationService.getStudentApplicationsByCourse(courseId));
+    }
+
+    // Get a single student applications by student application's id
+    @GetMapping("/{applicationId}")
     public StudentApplication getStudentApplication(@PathVariable Long applicationId) {
         try {
             return studentApplicationService.getById(applicationId);
@@ -47,14 +60,11 @@ public class StudentApplicationController {
     }
 
     // Create(POST)a new student application
-    @PostMapping("/{userId}")
-    public ResponseEntity<StudentApplication> addStudentApplication(@PathVariable Long applicationId,
+    @PostMapping
+    public ResponseEntity<StudentApplication> addStudentApplication(
             @RequestBody StudentApplicationRequest request) {
         try {
-            StudentApplication studentApplication = studentApplicationService.addStudentApplication(
-                    request.applicationId(), request.student(), request.course(), request.status(),
-                    request.personalStatement());
-            return ResponseEntity.ok(studentApplication);
+            return new ResponseEntity<>(studentApplicationService.addStudentApplication(request), HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (OptimisticLockingFailureException e) {
@@ -62,28 +72,36 @@ public class StudentApplicationController {
         }
     }
 
-    // Update(PUT) a single course
-    @PutMapping("/{id}")
-    public StudentApplication updateStudentApplication(@PathVariable Long id,
-            @RequestBody StudentApplication updatedStudentApplication) {
+    // Update(PUT) an application by status
+    @PutMapping("/{applicationId}/status")
+    public StudentApplication updateStudentApplication(@PathVariable Long applicationId,
+            @RequestBody StatusUpdateRequest request) {
         try {
-            return studentApplicationService.updateStudentApplication(id, updatedStudentApplication);
+            return studentApplicationService.updateStudentApplicationStatus(applicationId, request);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    // Update application by the student
+    @PutMapping("/{applicationId}")
+    public StudentApplication updateStudentApplication(@PathVariable Long applicationId,
+            @RequestBody StudentApplicationRequest request) {
+        try {
+            return studentApplicationService.updateStudentApplication(applicationId, request);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     // Delete a single StudentApplication
-    @DeleteMapping("/{id}")
-    public void deleteStudentApplication(@PathVariable Long id) {
+    @DeleteMapping("/{applicationId}")
+    public void deleteStudentApplication(@PathVariable Long applicationId) {
         try {
-            studentApplicationService.deleteStudentApplication(id);
+            studentApplicationService.deleteStudentApplication(applicationId);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
-    public record StudentApplicationRequest(Long applicationId, Student student, Course course, Status status,
-            String personalStatement) {
-    }
 }
