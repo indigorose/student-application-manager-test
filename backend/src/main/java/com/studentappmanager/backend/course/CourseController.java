@@ -4,6 +4,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.studentappmanager.backend.course.CourseService.CourseRequest;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @CrossOrigin
 @RestController
@@ -34,11 +37,17 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getAllCourses());
     }
 
+    // Get courses by tutor id
+    @GetMapping(params = "tutorUserId")
+    public ResponseEntity<List<Course>> getByTutor(@RequestParam Long tutorUserId) {
+        return ResponseEntity.ok(courseService.getCoursesByTutor(tutorUserId));
+    }
+
     // Get a single course by course id
-    @GetMapping("/{id}")
-    public Course getCourse(@PathVariable Long id) {
+    @GetMapping("/{courseId}")
+    public Course getCourse(@PathVariable Long courseId) {
         try {
-            return courseService.getCourse(id);
+            return courseService.getCourse(courseId);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
@@ -46,9 +55,9 @@ public class CourseController {
 
     // Create(POST)a new course
     @PostMapping
-    public ResponseEntity<Course> addCourse(@RequestBody Course course) {
+    public ResponseEntity<Course> addCourse(@RequestBody CourseRequest request) {
         try {
-            return new ResponseEntity<>(courseService.addCourse(course), HttpStatus.CREATED);
+            return new ResponseEntity<>(courseService.addCourse(request), HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (OptimisticLockingFailureException e) {
@@ -57,23 +66,22 @@ public class CourseController {
     }
 
     // Update(PUT) a single course
-    @PutMapping("/{id}")
-    public Course updateCourse(@PathVariable Long id, @RequestBody Course updatedCourse) {
+    @PutMapping("/{courseId}")
+    public Course updateCourse(@PathVariable Long courseId, @RequestBody CourseRequest request) {
         try {
-            return courseService.updateCourse(id, updatedCourse);
+            return courseService.updateCourse(courseId, request);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     // Delete a single course
-    @DeleteMapping("/{id}")
-    public void deleteCourse(@PathVariable Long id) {
+    @DeleteMapping("/{courseId}")
+    public void deleteCourse(@PathVariable Long courseId) {
         try {
-            courseService.deleteCourse(id);
+            courseService.deleteCourse(courseId);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
-
 }

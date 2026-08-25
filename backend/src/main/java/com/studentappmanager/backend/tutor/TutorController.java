@@ -58,9 +58,9 @@ public class TutorController {
 
     // Update(PUT) a single Tutor
     @PutMapping("/{userId}")
-    public Tutor updateTutor(@PathVariable Long id, @RequestBody Tutor updatedTutor) {
+    public Tutor updateTutor(@PathVariable Long userId, @RequestBody Tutor updatedTutor) {
         try {
-            return tutorService.updateTutor(id, updatedTutor);
+            return tutorService.updateTutor(userId, updatedTutor);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
