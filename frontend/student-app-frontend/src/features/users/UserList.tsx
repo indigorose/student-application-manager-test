@@ -2,11 +2,13 @@ import { api } from '../../api/usersApi';
 import Card from '../../components/Card';
 import useApi from '../../hooks/useApi';
 import type { User } from '../../types/user';
+import CreateUserForm from './CreateUserForm';
 
 function UserList() {
 	const { state, refreshUserList } = useApi<User[]>(() => api.getAllUsers());
 	return (
 		<>
+			<CreateUserForm onSubmitForm={refreshUserList} />
 			<button onClick={refreshUserList}>Refresh List</button>
 			{state.status === 'idle' && (
 				<p>Nothing loaded yet. Please refresh.</p>

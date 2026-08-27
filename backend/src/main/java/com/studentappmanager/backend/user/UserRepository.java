@@ -9,12 +9,12 @@ public interface UserRepository extends ListCrudRepository<User, Long> {
 
     List<User> findByIsActiveTrue();
 
-    Optional<User> findByIdAndIsActive(Long id);
+    Optional<User> findById(Long id);
 
     // Find by email method
-    Optional<User> findByEmailAndIsActive(String email);
+    Optional<User> findByEmailAndIsActiveTrue(String email);
 
     // Find by role
-    List<User> findByRoleAndIsActive(Role role);
+    List<User> findByRoleAndIsActiveTrue(Role role);
 
 }

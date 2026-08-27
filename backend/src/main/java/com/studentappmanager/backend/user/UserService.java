@@ -21,18 +21,18 @@ public class UserService {
 
     // List users by role
     public List<User> getUsersByRole(Role role) {
-        return userRepository.findByRoleAndIsActive(role);
+        return userRepository.findByRoleAndIsActiveTrue(role);
     }
 
     // Find user by email
     public User getUserByEmail(String email) {
-        return userRepository.findByEmailAndIsActive(email)
+        return userRepository.findByEmailAndIsActiveTrue(email)
                 .orElseThrow(() -> new NoSuchElementException("User not found with email: " + email));
     }
 
     // Find a single user by id
     public User getUser(Long id) {
-        return userRepository.findByIdAndIsActive(id)
+        return userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found with id: " + id));
     }
 
