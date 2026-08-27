@@ -39,7 +39,9 @@ public class StudentService {
         }
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("No user with id " + userId));
-
+        if (!user.getIsActive()) {
+            throw new IllegalStateException("Cannot create a profile for deactivated user: " + userId);
+        }
         if (user.getRole() != Role.STUDENT) {
             throw new IllegalStateException("User " + userId + " has role " + user.getRole() + " expected STUDENT.");
         }

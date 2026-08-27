@@ -12,7 +12,6 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 // import org.springframework.web.bind.annotation.RequestParam;
@@ -86,11 +85,23 @@ public class UserController {
         }
     }
 
-    // Delete a user
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
+    // Deactivate a user
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<Void> deactivateUser(@PathVariable Long id) {
         try {
-            userService.deleteUser(id);
+            userService.deactivateUser(id);
+            return ResponseEntity.noContent().build();
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    // Re-activate a user
+    @PutMapping("/{id}/activate")
+    public ResponseEntity<Void> reactivateUser(@PathVariable Long id) {
+        try {
+            userService.reactivateUser(id);
+            return ResponseEntity.noContent().build();
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

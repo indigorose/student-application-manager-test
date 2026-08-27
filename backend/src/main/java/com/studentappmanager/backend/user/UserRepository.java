@@ -7,12 +7,14 @@ import java.util.Optional;
 
 public interface UserRepository extends ListCrudRepository<User, Long> {
 
-    Optional<User> findById(Long id);
+    List<User> findByIsActiveTrue();
+
+    Optional<User> findByIdAndIsActive(Long id);
 
     // Find by email method
-    Optional<User> findByEmail(String email);
+    Optional<User> findByEmailAndIsActive(String email);
 
     // Find by role
-    List<User> findByRole(Role role);
+    List<User> findByRoleAndIsActive(Role role);
 
 }

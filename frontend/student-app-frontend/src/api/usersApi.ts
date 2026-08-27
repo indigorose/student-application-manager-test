@@ -26,7 +26,8 @@ export interface Api {
 	getUserByEmail(email: string): Promise<User | undefined>;
 	addUser(input: Omit<User, 'id'>): Promise<User>;
 	updateUser(id: number, patch: Partial<Omit<User, 'id'>>): Promise<User>;
-	removeUser(id: number): Promise<void>;
+	deactivateUser(id: number): Promise<void>;
+	reactivateUser(id: number): Promise<void>;
 }
 
 const usersApi: Api = {
@@ -74,11 +75,17 @@ const usersApi: Api = {
 		});
 	},
 
-	async removeUser(id: number) {
-		const response = await fetch(`${BASE_URL}/${id}`, {
-			method: 'DELETE',
+	async deactivateUser(id: number) {
+		const response = await fetch(`${BASE_URL}/${id}/deactivate`, {
+			method: 'PUT',
 		});
-		ensureOk(response, `remove user ${id}`);
+		ensureOk(response, `deactivate user ${id}`);
+	},
+	async reactivateUser(id: number) {
+		const response = await fetch(`${BASE_URL}/${id}/reactivate`, {
+			method: 'PUT',
+		});
+		ensureOk(response, `reactivate user ${id}`);
 	},
 };
 

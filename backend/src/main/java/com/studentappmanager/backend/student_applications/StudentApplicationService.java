@@ -51,6 +51,9 @@ public class StudentApplicationService {
     public StudentApplication addStudentApplication(StudentApplicationRequest request) {
         Student student = studentRepository.findByUserId(request.studentUserId())
                 .orElseThrow(() -> new NoSuchElementException("No student with id:" + request.studentUserId()));
+        if (!student.getUser().getIsActive()) {
+            throw new IllegalStateException("Student account is deactivated.");
+        }
         Course course = courseRepository.findById(request.courseId())
                 .orElseThrow(() -> new NoSuchElementException("No student with id:" + request.studentUserId()));
         StudentApplication studentApplication = new StudentApplication(student, course, Status.SUBMITTED,
