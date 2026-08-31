@@ -42,11 +42,11 @@ function useApi<T>(fetchFn: () => Promise<T>, deps: unknown[] = []) {
 		};
 	}, [refresh, ...deps]);
 
-	const refreshUserList = () => {
+	const refreshData = () => {
 		setRefresh(!refresh);
 	};
 
-	return { state, refreshUserList };
+	return { state, refreshData };
 }
 
 export default useApi;

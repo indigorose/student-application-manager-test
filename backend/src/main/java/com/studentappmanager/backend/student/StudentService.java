@@ -25,7 +25,7 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    // Find a single Tutor by id
+    // Find a single student by id
     public Student getByUserId(Long userId) {
         return studentRepository.findByUserId(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found with id: " + userId));

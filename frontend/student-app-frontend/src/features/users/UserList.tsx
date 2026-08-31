@@ -5,11 +5,11 @@ import type { User } from '../../types/user';
 import CreateUserForm from './CreateUserForm';
 
 function UserList() {
-	const { state, refreshUserList } = useApi<User[]>(() => api.getAllUsers());
+	const { state, refreshData } = useApi<User[]>(() => api.getAllUsers());
 	return (
 		<>
-			<CreateUserForm onSubmitForm={refreshUserList} />
-			<button onClick={refreshUserList}>Refresh List</button>
+			<CreateUserForm onSubmitForm={refreshData} />
+			<button onClick={refreshData}>Refresh List</button>
 			{state.status === 'idle' && (
 				<p>Nothing loaded yet. Please refresh.</p>
 			)}
