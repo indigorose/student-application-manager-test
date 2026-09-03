@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { Role, User } from '../../types/user';
 import { api } from '../../api/usersApi';
-
+import { Input, NativeSelect, Button } from '@chakra-ui/react';
 interface CreateUserFormProps {
 	onSubmitForm: () => void;
 }
@@ -56,8 +56,8 @@ function CreateUserForm({ onSubmitForm }: CreateUserFormProps) {
 	}
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<input
+		<form onSubmit={handleSubmit} className="userForm">
+			<Input
 				value={email}
 				placeholder="example@example.com"
 				onChange={(event) => {
@@ -66,7 +66,7 @@ function CreateUserForm({ onSubmitForm }: CreateUserFormProps) {
 				}}
 			/>
 			{errors.email && <p className="error">{errors.email}</p>}
-			<input
+			<Input
 				value={password}
 				placeholder="************"
 				onChange={(event) => {
@@ -75,20 +75,22 @@ function CreateUserForm({ onSubmitForm }: CreateUserFormProps) {
 				}}
 			/>
 			{errors.password && <p className="error">{errors.password}</p>}
-			<select
-				value={role}
-				onChange={(event) =>
-					setRole(event.target.value as User['role'])
-				}
-			>
-				<option value="ADMIN">Admin</option>
-				<option value="SPONSOR">Sponsor</option>
-				<option value="STUDENT">Student</option>
-				<option value="TUTOR">Tutor</option>
-			</select>
-			<button type="submit" disabled={isSubmitting}>
+			<NativeSelect.Root width="320px">
+				<NativeSelect.Field
+					placeholder="Select a role"
+					value={role}
+					onChange={(event) =>
+						setRole(event.target.value as User['role'])
+					}
+				>
+					<option value="ADMIN">Admin</option>
+					<option value="STUDENT">Student</option>
+					<option value="TUTOR">Tutor</option>
+				</NativeSelect.Field>
+			</NativeSelect.Root>
+			<Button type="submit" disabled={isSubmitting}>
 				{isSubmitting ? 'Adding…' : 'Add user'}
-			</button>
+			</Button>
 		</form>
 	);
 }
