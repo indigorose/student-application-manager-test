@@ -1,11 +1,11 @@
 // A list of students for the admin dashboard
-import { api } from '../../api/studentApi';
+import { studentsApi } from '../../api/studentApi';
 import useApi from '../../hooks/useApi';
 import type { Student } from '../../types/student';
 
-function UserList() {
+function StudentList() {
 	const { state, refreshData } = useApi<Student[]>(() =>
-		api.getAllStudents(),
+		studentsApi.getAllStudents(),
 	);
 	return (
 		<>
@@ -22,7 +22,7 @@ function UserList() {
 			{state.status === 'success' && (
 				<ul>
 					{state.data.map((student) => (
-						<li>
+						<li key={student.id}>
 							<p>
 								{student.firstName} {student.lastName}
 							</p>
@@ -35,4 +35,4 @@ function UserList() {
 	);
 }
 
-export default UserList;
+export default StudentList;

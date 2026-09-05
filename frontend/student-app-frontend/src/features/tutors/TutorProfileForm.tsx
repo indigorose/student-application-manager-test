@@ -1,6 +1,6 @@
 // Tutor profile creation
 import { useState } from 'react';
-import { api } from '../../api/tutorApi';
+import { tutorsApi } from '../../api/tutorApi';
 
 interface TutorProfileFormProps {
 	userId: number;
@@ -46,7 +46,7 @@ function TutorProfileForm({ userId, onCreated }: TutorProfileFormProps) {
 		}
 		setIsSubmitting(true);
 		try {
-			await api.addTutor(userId, {
+			await tutorsApi.addTutor(userId, {
 				firstName,
 				lastName,
 				department,

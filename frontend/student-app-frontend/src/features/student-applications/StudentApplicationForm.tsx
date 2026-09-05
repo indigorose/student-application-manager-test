@@ -1,6 +1,6 @@
 // Student application form
 import { useState } from 'react';
-import { api } from '../../api/studentApplicationApi';
+import { studentApplicationsApi } from '../../api/studentApplicationApi';
 
 interface StudentApplicationFormProps {
 	studentUserId: number;
@@ -37,7 +37,7 @@ function StudentApplicationForm({
 		}
 		setIsSubmitting(true);
 		try {
-			await api.submitApplication({
+			await studentApplicationsApi.submitApplication({
 				studentUserId,
 				courseId: Number(courseId),
 				personalStatement,

@@ -1,7 +1,7 @@
 // Add course by Tutor
 
 import { useState } from 'react';
-import { api } from '../../api/coursesApi';
+import { coursesApi } from '../../api/coursesApi';
 
 interface CourseFormProps {
 	tutorUserId: number;
@@ -73,7 +73,7 @@ function CourseForm({ tutorUserId, onCreated }: CourseFormProps) {
 		}
 		setIsSubmitting(true);
 		try {
-			await api.addCourse({
+			await coursesApi.addCourse({
 				tutorUserId,
 				title,
 				description,

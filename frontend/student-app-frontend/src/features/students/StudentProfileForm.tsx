@@ -1,6 +1,6 @@
 // Student profile creation
 import { useState } from 'react';
-import { api } from '../../api/studentApi';
+import { studentsApi } from '../../api/studentApi';
 
 interface StudentProfileFormProps {
 	userId: number;
@@ -59,7 +59,7 @@ function StudentProfileForm({ userId, onCreated }: StudentProfileFormProps) {
 		}
 		setIsSubmitting(true);
 		try {
-			await api.addStudent(userId, {
+			await studentsApi.addStudent(userId, {
 				firstName,
 				lastName,
 				dob,

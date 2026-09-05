@@ -38,4 +38,4 @@ const tutorApi: Api = {
 	},
 };
 
-export const api: Api = tutorApi;
+export const tutorsApi: Api = tutorApi;

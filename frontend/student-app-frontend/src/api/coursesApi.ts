@@ -40,4 +40,4 @@ const courseApi: Api = {
 	},
 };
 
-export const api: Api = courseApi;
+export const coursesApi: Api = courseApi;

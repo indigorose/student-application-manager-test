@@ -1,12 +1,12 @@
 // List of applications for the Admin
 
 import useApi from '../../hooks/useApi';
-import { api } from '../../api/studentApplicationApi';
+import { studentApplicationsApi } from '../../api/studentApplicationApi';
 import type { StudentApplication } from '../../types/studentApplication';
 
 function ApplicationList() {
 	const { state } = useApi<StudentApplication[]>(() =>
-		api.getAllApplications(),
+		studentApplicationsApi.getAllApplications(),
 	);
 
 	if (state.status === 'idle' || state.status == 'loading') {

@@ -74,4 +74,4 @@ const studentApplicationApi: Api = {
 	},
 };
 
-export const api: Api = studentApplicationApi;
+export const studentApplicationsApi: Api = studentApplicationApi;

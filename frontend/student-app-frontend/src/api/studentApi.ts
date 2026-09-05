@@ -49,4 +49,4 @@ const studentApi: Api = {
 	// }
 };
 
-export const api: Api = studentApi;
+export const studentsApi: Api = studentApi;

@@ -2,7 +2,7 @@
 
 import useApi from '../hooks/useApi';
 import TutorProfileForm from '../features/tutors/TutorProfileForm';
-import { api } from '../api/tutorApi';
+import { tutorsApi } from '../api/tutorApi';
 import TutorProfileView from '../components/TutorProfileView';
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 
 function TutorDashboard({ userId }: Props) {
 	const { state: tutorState, refreshData: reloadTutor } = useApi(
-		() => api.getTutorById(userId),
+		() => tutorsApi.getTutorById(userId),
 		[userId],
 	);
 	if (tutorState.status === 'loading' || tutorState.status === 'idle') {

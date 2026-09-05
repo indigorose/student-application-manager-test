@@ -1,6 +1,6 @@
 import useApi from '../hooks/useApi';
 import StudentProfileForm from '../features/students/StudentProfileForm';
-import { api } from '../api/studentApi';
+import { studentsApi } from '../api/studentApi';
 import StudentProfileView from '../components/StudentProfileView';
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 
 function StudentDashboard({ userId }: Props) {
 	const { state: studentState, refreshData: reloadStudent } = useApi(
-		() => api.getStudentById(userId),
+		() => studentsApi.getStudentById(userId),
 		[userId],
 	);
 

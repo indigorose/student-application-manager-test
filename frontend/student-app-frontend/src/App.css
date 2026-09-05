@@ -187,3 +187,8 @@
 	width: 320px;
 	margin: 50px 100px;
 }
+
+.dashboard-title {
+	font-size: 2rem;
+	font-weight: bold;
+}

@@ -1,10 +1,10 @@
 // List the courses view only for the student
 import useApi from '../../hooks/useApi';
-import { api } from '../../api/coursesApi';
+import { coursesApi } from '../../api/coursesApi';
 import type { Course } from '../../types/course';
 
 function CourseCatalogue() {
-	const { state } = useApi<Course[]>(() => api.getAllCourses());
+	const { state } = useApi<Course[]>(() => coursesApi.getAllCourses());
 
 	if (state.status === 'idle' || state.status == 'loading') {
 		return <p>Loading courses</p>;
