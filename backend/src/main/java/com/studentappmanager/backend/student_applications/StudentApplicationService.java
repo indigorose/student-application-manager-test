@@ -89,8 +89,18 @@ public class StudentApplicationService {
     public StudentApplication updateStudentApplicationStatus(Long applicationId,
             StatusUpdateRequest request) {
         StudentApplication application = getById(applicationId);
-        application.setStatus(request.status());
+        Status previousStatus = application.getStatus();
 
+        if (request.status == Status.APPROVED && previousStatus != Status.APPROVED) {
+            Course course = application.getCourse();
+            if (course.getCapacity() <= 0) {
+                throw new IllegalStateException("Cannot approve - course is at full capacity.");
+            }
+            course.setCapacity(course.getCapacity() - 1);
+            courseRepository.save(course);
+        }
+
+        application.setStatus(request.status());
         // Check and update review dates
         if (request.status() == Status.APPROVED || request.status() == Status.REJECTED) {
             application.setReviewedAt(LocalDateTime.now());
