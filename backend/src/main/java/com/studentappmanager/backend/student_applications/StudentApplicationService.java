@@ -56,9 +56,33 @@ public class StudentApplicationService {
         }
         Course course = courseRepository.findById(request.courseId())
                 .orElseThrow(() -> new NoSuchElementException("No student with id:" + request.studentUserId()));
-        StudentApplication studentApplication = new StudentApplication(student, course, Status.SUBMITTED,
+        StudentApplication studentApplication = new StudentApplication(student, course, Status.DRAFT,
                 request.personalStatement());
         return studentApplicationRepository.save(studentApplication);
+    }
+
+    // Draft application update
+    public StudentApplication submitDraft(Long applicationId) {
+        StudentApplication application = getById(applicationId);
+        if (application.getStatus() != Status.DRAFT) {
+            throw new IllegalStateException(
+                    " Only a draft application can be submitted. - Current status: "
+                            + application.getStatus());
+        }
+        application.setStatus(Status.SUBMITTED);
+        return studentApplicationRepository.save(application);
+    }
+
+    // Return a submitted application back to draft status
+    public StudentApplication returnToDraft(Long applicationId) {
+        StudentApplication application = getById(applicationId);
+        if (application.getStatus() != Status.SUBMITTED) {
+            throw new IllegalStateException(
+                    " Only a submitted application can be reverted back to draft status. - Current status: "
+                            + application.getStatus());
+        }
+        application.setStatus(Status.DRAFT);
+        return studentApplicationRepository.save(application);
     }
 
     // Update student application's status by the tutor

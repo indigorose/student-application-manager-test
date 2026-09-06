@@ -83,6 +83,30 @@ public class StudentApplicationController {
         }
     }
 
+    // Update application statuses by Student
+
+    @PutMapping("{id}/submit")
+    public ResponseEntity<StudentApplication> submitDraft(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(studentApplicationService.submitDraft(id));
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (IllegalStateException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/return-to-draft")
+    public ResponseEntity<StudentApplication> returnToDraft(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(studentApplicationService.returnToDraft(id));
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (IllegalStateException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
+    }
+
     // Update application by the student
     @PutMapping("/{applicationId}")
     public StudentApplication updateStudentApplication(@PathVariable Long applicationId,

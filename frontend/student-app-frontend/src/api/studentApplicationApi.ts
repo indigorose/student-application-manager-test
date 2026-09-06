@@ -17,6 +17,12 @@ export interface Api {
 	submitApplication(
 		request: StudentApplicationRequest,
 	): Promise<StudentApplication>;
+	returnToDraft(applicationId: number): Promise<StudentApplication>;
+	submitDraft(applicationId: number): Promise<StudentApplication>;
+	updateApplication(
+		applicationId: number,
+		request: StudentApplicationRequest,
+	): Promise<StudentApplication>;
 	updateApplicationStatus(
 		applicationId: number,
 		request: StatusUpdateRequest,
@@ -47,11 +53,47 @@ const studentApplicationApi: Api = {
 			'Get application by ID.',
 		);
 	},
+
 	async submitApplication(request: StudentApplicationRequest) {
-		return fetchJson<StudentApplication>(BASE_URL, 'Submit application', {
-			method: 'POST',
-			body: JSON.stringify(request),
-		});
+		return fetchJson<StudentApplication>(
+			`${BASE_URL}`,
+			'Submit application',
+			{
+				method: 'POST',
+				body: JSON.stringify(request),
+			},
+		);
+	},
+	async submitDraft(applicationId) {
+		return fetchJson<StudentApplication>(
+			`${BASE_URL}/${applicationId}/submit`,
+			`submit application: ${applicationId}`,
+			{
+				method: 'PUT',
+			},
+		);
+	},
+	async returnToDraft(applicationId: number) {
+		return fetchJson<StudentApplication>(
+			`${BASE_URL}/${applicationId}/return-to-draft`,
+			`return application: ${applicationId} to draft`,
+			{
+				method: 'PUT',
+			},
+		);
+	},
+	async updateApplication(
+		applicationId: number,
+		request: StudentApplicationRequest,
+	) {
+		return fetchJson<StudentApplication>(
+			`${BASE_URL}/${applicationId}`,
+			'Submit application',
+			{
+				method: 'PUT',
+				body: JSON.stringify(request),
+			},
+		);
 	},
 	async updateApplicationStatus(
 		applicationId: number,

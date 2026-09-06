@@ -7,12 +7,12 @@ import { NativeSelect } from '@chakra-ui/react';
 
 interface StudentApplicationFormProps {
 	studentUserId: number;
-	onSubmitted: () => void;
+	onCreated: () => void;
 }
 
 function StudentApplicationForm({
 	studentUserId,
-	onSubmitted,
+	onCreated,
 }: StudentApplicationFormProps) {
 	const { state: coursesState } = useApi(
 		() => coursesApi.getAllCourses(),
@@ -55,7 +55,7 @@ function StudentApplicationForm({
 			});
 			setCourseId('');
 			setPersonalStatement('');
-			onSubmitted();
+			onCreated();
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -94,7 +94,7 @@ function StudentApplicationForm({
 				<p className="error">{errors.personalStatement}</p>
 			)}
 			<button type="submit" disabled={isSubmitting}>
-				{isSubmitting ? 'Adding…' : 'Submit Application'}
+				{isSubmitting ? 'Adding…' : 'Save as draft'}
 			</button>
 		</form>
 	);
