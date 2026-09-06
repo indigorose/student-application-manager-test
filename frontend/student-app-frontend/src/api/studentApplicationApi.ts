@@ -13,6 +13,7 @@ export interface Api {
 		studentUserId: number,
 	): Promise<StudentApplication[]>;
 	getApplicationsByCourse(courseId: number): Promise<StudentApplication[]>;
+	getApplicationsByTutor(tutorUserId: number): Promise<StudentApplication[]>;
 	getApplication(applicationId: number): Promise<StudentApplication>;
 	submitApplication(
 		request: StudentApplicationRequest,
@@ -38,6 +39,12 @@ const studentApplicationApi: Api = {
 	async getApplicationsByStudent(studentUserId) {
 		return fetchJson<StudentApplication[]>(
 			`${BASE_URL}?studentUserId=${studentUserId}`,
+			'list applications by Student.',
+		);
+	},
+	async getApplicationsByTutor(tutorUserId) {
+		return fetchJson<StudentApplication[]>(
+			`${BASE_URL}?studentUserId=${tutorUserId}`,
 			'list applications by Student.',
 		);
 	},

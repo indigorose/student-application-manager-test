@@ -8,6 +8,7 @@ export interface Api {
 	getCourseById(id: number): Promise<Course | undefined>;
 	addCourse(input: NewCourseRequest): Promise<Course>;
 	getCourseByTutorId(id: number): Promise<Course[]>;
+	updateCourse(id: number, input: NewCourseRequest): Promise<Course>;
 }
 
 const courseApi: Api = {
@@ -28,6 +29,13 @@ const courseApi: Api = {
 	async addCourse(input: NewCourseRequest) {
 		return fetchJson<Course>(`${BASE_URL}`, `add course: ${input.title}`, {
 			method: 'POST',
+			body: JSON.stringify(input),
+		});
+	},
+	// Update a course
+	async updateCourse(id: number, input: NewCourseRequest) {
+		return fetchJson<Course>(`${BASE_URL}/${id}`, 'Update course', {
+			method: 'PUT',
 			body: JSON.stringify(input),
 		});
 	},

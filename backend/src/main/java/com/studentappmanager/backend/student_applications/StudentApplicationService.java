@@ -47,6 +47,11 @@ public class StudentApplicationService {
         return studentApplicationRepository.findByCourseId(courseId);
     }
 
+    // List applications by Tutor Id
+    public List<StudentApplication> getStudentApplicationsByTutor(Long tutorUserId) {
+        return studentApplicationRepository.findByCourse_Tutor_User_Id(tutorUserId);
+    }
+
     // Add student application
     public StudentApplication addStudentApplication(StudentApplicationRequest request) {
         Student student = studentRepository.findByUserId(request.studentUserId())

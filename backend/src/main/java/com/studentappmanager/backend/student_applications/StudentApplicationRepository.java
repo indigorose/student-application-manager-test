@@ -10,4 +10,6 @@ public interface StudentApplicationRepository extends ListCrudRepository<Student
 
     List<StudentApplication> findByCourseId(Long courseId);
 
+    List<StudentApplication> findByCourse_Tutor_User_Id(Long tutorUserId);
+
 }

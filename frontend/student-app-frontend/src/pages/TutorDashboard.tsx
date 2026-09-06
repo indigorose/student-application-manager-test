@@ -4,6 +4,9 @@ import useApi from '../hooks/useApi';
 import TutorProfileForm from '../features/tutors/TutorProfileForm';
 import { tutorsApi } from '../api/tutorApi';
 import TutorProfileView from '../components/TutorProfileView';
+import UpdateUserForm from '@/features/users/UpdateUserForm';
+import TutorCoursesPanel from '@/features/tutors/TutorCoursesPanel';
+import TutorApplicationsPanel from '@/features/tutors/TutorsApplicationsPanel';
 
 interface Props {
 	userId: number;
@@ -25,7 +28,32 @@ function TutorDashboard({ userId }: Props) {
 		return <TutorProfileForm userId={userId} onCreated={reloadTutor} />;
 	}
 
-	return <TutorProfileView tutor={tutorState.data} onUpdated={reloadTutor} />;
+	const tutor = tutorState.data;
+
+	return (
+		<div>
+			<div>
+				<h2>
+					Tutor: {tutor.firstName} {tutor.lastName}' Dashboard
+				</h2>
+				<UpdateUserForm user={tutor.user} onUpdated={reloadTutor} />
+			</div>
+			<div>
+				<h2>Profile</h2>
+				<TutorProfileView
+					tutor={tutorState.data}
+					onUpdated={reloadTutor}
+				/>
+			</div>
+			<div>
+				<h2>My Courses</h2>
+				<TutorCoursesPanel tutorUserId={userId} />
+			</div>
+			<div>
+				<TutorApplicationsPanel tutorUserId={userId} />
+			</div>
+		</div>
+	);
 }
 
 export default TutorDashboard;

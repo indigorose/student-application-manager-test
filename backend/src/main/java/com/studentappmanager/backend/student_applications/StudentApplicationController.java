@@ -43,6 +43,12 @@ public class StudentApplicationController {
         return ResponseEntity.ok(studentApplicationService.getStudentApplicationsByStudent(studentUserId));
     }
 
+    // Get List of applications by tutor Id
+    @GetMapping(params = "tutorUserId")
+    public ResponseEntity<List<StudentApplication>> getByTutor(@RequestParam Long tutorUserId) {
+        return ResponseEntity.ok(studentApplicationService.getStudentApplicationsByTutor(tutorUserId));
+    }
+
     // Get list of applications by course id
     @GetMapping(params = "courseId")
     public ResponseEntity<List<StudentApplication>> getByCourse(@RequestParam Long courseId) {

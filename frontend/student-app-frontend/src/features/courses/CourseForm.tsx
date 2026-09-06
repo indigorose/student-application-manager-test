@@ -2,13 +2,19 @@
 
 import { useState } from 'react';
 import { coursesApi } from '../../api/coursesApi';
+import type { Course } from '../../types/course';
 
 interface CourseFormProps {
 	tutorUserId: number;
+	existingCourse?: Course;
 	onCreated: () => void;
 }
 
-function CourseForm({ tutorUserId, onCreated }: CourseFormProps) {
+function CourseForm({
+	tutorUserId,
+	existingCourse,
+	onCreated,
+}: CourseFormProps) {
 	interface FormErrors {
 		title?: string;
 		description?: string;
@@ -50,11 +56,15 @@ function CourseForm({ tutorUserId, onCreated }: CourseFormProps) {
 
 		return errors;
 	}
-	const [title, setTitle] = useState('');
-	const [description, setDescription] = useState('');
-	const [category, setCategory] = useState('');
-	const [capacity, setCapacity] = useState('');
-	const [startDate, setStartDate] = useState('');
+	const [title, setTitle] = useState(existingCourse?.title ?? '');
+	const [description, setDescription] = useState(
+		existingCourse?.description ?? '',
+	);
+	const [category, setCategory] = useState(existingCourse?.category ?? '');
+	const [capacity, setCapacity] = useState(
+		existingCourse ? String(existingCourse.capacity) : '',
+	);
+	const [startDate, setStartDate] = useState(existingCourse?.startDate ?? '');
 	const [errors, setErrors] = useState<FormErrors>({});
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -73,19 +83,24 @@ function CourseForm({ tutorUserId, onCreated }: CourseFormProps) {
 		}
 		setIsSubmitting(true);
 		try {
-			await coursesApi.addCourse({
+			const request = {
 				tutorUserId,
 				title,
 				description,
 				category,
 				capacity: Number(capacity),
 				startDate,
-			});
-			setTitle('');
-			setDescription('');
-			setCategory('');
-			setCapacity('');
-			setStartDate('');
+			};
+			if (existingCourse) {
+				await coursesApi.updateCourse(existingCourse.id, request);
+			} else {
+				await coursesApi.addCourse(request);
+				setTitle('');
+				setDescription('');
+				setCategory('');
+				setCapacity('');
+				setStartDate('');
+			}
 			onCreated();
 		} finally {
 			setIsSubmitting(false);
@@ -160,7 +175,13 @@ function CourseForm({ tutorUserId, onCreated }: CourseFormProps) {
 			/>
 			{errors.startDate && <p className="error">{errors.startDate}</p>}
 			<button type="submit" disabled={isSubmitting}>
-				{isSubmitting ? 'Adding…' : 'Add course'}
+				{isSubmitting
+					? existingCourse
+						? 'Saving...'
+						: 'Adding...'
+					: existingCourse
+						? 'Save changes'
+						: 'Add Course'}
 			</button>
 		</form>
 	);
