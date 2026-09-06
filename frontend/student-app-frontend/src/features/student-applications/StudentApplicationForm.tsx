@@ -1,6 +1,9 @@
 // Student application form
 import { useState } from 'react';
 import { studentApplicationsApi } from '../../api/studentApplicationApi';
+import useApi from '@/hooks/useApi';
+import { coursesApi } from '@/api/coursesApi';
+import { NativeSelect } from '@chakra-ui/react';
 
 interface StudentApplicationFormProps {
 	studentUserId: number;
@@ -11,14 +14,22 @@ function StudentApplicationForm({
 	studentUserId,
 	onSubmitted,
 }: StudentApplicationFormProps) {
+	const { state: coursesState } = useApi(
+		() => coursesApi.getAllCourses(),
+		[],
+	);
 	interface FormErrors {
 		personalStatement?: string;
+		courseId?: string;
 	}
 
 	function validate(personalStatement: string): FormErrors {
 		const errors: FormErrors = {};
 		if (personalStatement.trim() === '') {
 			errors.personalStatement = 'Please add a personal statement.';
+		}
+		if (courseId.trim() === '') {
+			errors.courseId = 'Please select your course.';
 		}
 		return errors;
 	}
@@ -51,6 +62,23 @@ function StudentApplicationForm({
 	}
 	return (
 		<form onSubmit={handleSubmit}>
+			{coursesState.status === 'success' && (
+				<NativeSelect.Root width="350px">
+					<NativeSelect.Field
+						placeholder="Select a course"
+						value={courseId}
+						onChange={(event) => setCourseId(event.target.value)}
+					>
+						{coursesState.data.map((course) => (
+							<option key={course.id} value={course.id}>
+								{course.title}
+							</option>
+						))}
+					</NativeSelect.Field>
+				</NativeSelect.Root>
+			)}
+			{errors.courseId && <p className="error">{errors.courseId}</p>}
+
 			<input
 				value={personalStatement}
 				placeholder="Personal Statement"

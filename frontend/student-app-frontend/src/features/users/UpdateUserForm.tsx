@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { User } from '../../types/user';
 import { api } from '../../api/usersApi';
-import { Input, Button } from '@chakra-ui/react';
+import { Input, Button, Stack } from '@chakra-ui/react';
 interface UpdateUserFormProps {
 	user: User;
 	onUpdated: () => void;
@@ -16,7 +16,11 @@ function UpdateUserForm({ user, onUpdated }: UpdateUserFormProps) {
 		event.preventDefault();
 		setIsSubmitting(true);
 		try {
-			await api.updateUser(user.id, { email, password });
+			await api.updateUser(user.id, {
+				email,
+				...(password.trim() !== '' ? { password } : {}),
+			});
+			setPassword('');
 			onUpdated();
 		} finally {
 			setIsSubmitting(false);
@@ -25,20 +29,22 @@ function UpdateUserForm({ user, onUpdated }: UpdateUserFormProps) {
 
 	return (
 		<form onSubmit={handleSubmit}>
-			<Input
-				value={email}
-				onChange={(event) => setEmail(event.target.value)}
-				placeholder="Email"
-			/>
-			<Input
-				type="password"
-				value={password}
-				onChange={(event) => setPassword(event.target.value)}
-				placeholder="New Password"
-			/>
-			<Button type="submit" disabled={isSubmitting}>
-				{isSubmitting ? 'Saving…' : 'Save Changes'}
-			</Button>
+			<Stack gap={3}>
+				<Input
+					value={email}
+					onChange={(event) => setEmail(event.target.value)}
+					placeholder="Email"
+				/>
+				<Input
+					type="password"
+					value={password}
+					onChange={(event) => setPassword(event.target.value)}
+					placeholder="New Password (leave blank to keep current password)"
+				/>
+				<Button type="submit" disabled={isSubmitting}>
+					{isSubmitting ? 'Saving…' : 'Save Changes'}
+				</Button>
+			</Stack>
 		</form>
 	);
 }

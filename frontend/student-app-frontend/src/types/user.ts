@@ -11,4 +11,7 @@ export interface User {
 
 export type NewUser = Omit<User, 'id'>;
 
-export type UpdateUserRequest = Pick<User, 'email' | 'password'>;
+export interface UpdateUserRequest {
+	email: string;
+	password?: string;
+}

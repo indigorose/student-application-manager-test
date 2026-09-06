@@ -69,7 +69,7 @@ const usersApi: Api = {
 		});
 	},
 	async updateUser(id: number, patch: UpdateUserRequest) {
-		return fetchJson<User>(BASE_URL, `update user: ${id}`, {
+		return fetchJson<User>(`${BASE_URL}/${id}`, `update user: ${id}`, {
 			method: 'PUT',
 			body: JSON.stringify(patch),
 		});
