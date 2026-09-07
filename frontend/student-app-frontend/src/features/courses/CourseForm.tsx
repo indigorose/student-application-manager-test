@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { coursesApi } from '../../api/coursesApi';
 import type { Course } from '../../types/course';
 
+import { Fieldset, Stack, Field, Input, Button } from '@chakra-ui/react';
+
 interface CourseFormProps {
 	tutorUserId: number;
 	existingCourse?: Course;
@@ -109,80 +111,138 @@ function CourseForm({
 
 	return (
 		<form onSubmit={handleSubmit}>
-			<input
-				value={title}
-				placeholder="First Name"
-				onChange={(event) => {
-					setTitle(event.target.value);
-					setErrors((prev) => ({
-						...prev,
-						title: undefined,
-					}));
-				}}
-			/>
-			{errors.title && <p className="error">{errors.title}</p>}
-			<input
-				value={description}
-				placeholder="Course Description"
-				onChange={(event) => {
-					setTitle(event.target.value);
-					setErrors((prev) => ({
-						...prev,
-						description: undefined,
-					}));
-				}}
-			/>
-			{errors.description && (
-				<p className="error">{errors.description}</p>
-			)}
-			<input
-				value={category}
-				placeholder="Category"
-				onChange={(event) => {
-					setTitle(event.target.value);
-					setErrors((prev) => ({
-						...prev,
-						category: undefined,
-					}));
-				}}
-			/>
-			{errors.category && <p className="error">{errors.category}</p>}
-			<input
-				type="number"
-				min={1}
-				value={capacity}
-				placeholder="Course Capacity"
-				onChange={(event) => {
-					setTitle(event.target.value);
-					setErrors((prev) => ({
-						...prev,
-						capacity: undefined,
-					}));
-				}}
-			/>
-			{errors.capacity && <p className="error">{errors.capacity}</p>}
-			<input
-				type="date"
-				value={startDate}
-				placeholder="Start Date"
-				onChange={(event) => {
-					setTitle(event.target.value);
-					setErrors((prev) => ({
-						...prev,
-						startDate: undefined,
-					}));
-				}}
-			/>
-			{errors.startDate && <p className="error">{errors.startDate}</p>}
-			<button type="submit" disabled={isSubmitting}>
-				{isSubmitting
-					? existingCourse
-						? 'Saving...'
-						: 'Adding...'
-					: existingCourse
-						? 'Save changes'
-						: 'Add Course'}
-			</button>
+			<Fieldset.Root size="md" maxW="md">
+				<Stack>
+					<Fieldset.Legend>
+						{existingCourse ? 'Update Course' : 'Add Course'}
+					</Fieldset.Legend>
+					<Fieldset.HelperText>
+						{existingCourse
+							? "Edit this course's details "
+							: 'Add your course to the database'}
+					</Fieldset.HelperText>
+				</Stack>
+				<Fieldset.Content>
+					<Field.Root>
+						<Field.Label>Course Title</Field.Label>
+						<Input
+							value={title}
+							placeholder="Course Title"
+							onChange={(event) => {
+								setTitle(event.target.value);
+								setErrors((prev) => ({
+									...prev,
+									title: undefined,
+								}));
+							}}
+						/>
+						{errors.title && (
+							<Field.HelperText color="red" className="error">
+								{errors.title}
+							</Field.HelperText>
+						)}
+					</Field.Root>
+					<Field.Root>
+						<Field.Label>Course Description</Field.Label>
+						<Input
+							value={description}
+							placeholder="Course Description"
+							onChange={(event) => {
+								setDescription(event.target.value);
+								setErrors((prev) => ({
+									...prev,
+									description: undefined,
+								}));
+							}}
+						/>
+						{errors.description && (
+							<Field.HelperText color="red" className="error">
+								{errors.description}
+							</Field.HelperText>
+						)}
+					</Field.Root>
+					<Field.Root>
+						<Field.Label>Category</Field.Label>
+						<Input
+							value={category}
+							placeholder="Category"
+							onChange={(event) => {
+								setCategory(event.target.value);
+								setErrors((prev) => ({
+									...prev,
+									category: undefined,
+								}));
+							}}
+						/>
+						{errors.category && (
+							<Field.HelperText color="red" className="error">
+								{errors.category}
+							</Field.HelperText>
+						)}
+					</Field.Root>
+					<Field.Root>
+						<Field.Label>Course Capacity</Field.Label>
+						<Input
+							type="number"
+							min={1}
+							value={capacity}
+							placeholder="Course Capacity"
+							onChange={(event) => {
+								setCapacity(event.target.value);
+								setErrors((prev) => ({
+									...prev,
+									capacity: undefined,
+								}));
+							}}
+						/>
+						{errors.capacity && (
+							<Field.HelperText color="red" className="error">
+								{errors.capacity}
+							</Field.HelperText>
+						)}
+						{existingCourse &&
+							existingCourse.capacity !== Number(capacity) && (
+								<Field.HelperText color="orange.500">
+									This course has approved applications
+									counted against its original capacity.
+									Changing this number won't undo or reapply
+									those approvals. It will provide a new
+									total.
+								</Field.HelperText>
+							)}
+					</Field.Root>
+					<Field.Root>
+						<Field.Label>Start Date</Field.Label>
+						<Input
+							type="date"
+							value={startDate}
+							placeholder="Start Date"
+							onChange={(event) => {
+								setStartDate(event.target.value);
+								setErrors((prev) => ({
+									...prev,
+									startDate: undefined,
+								}));
+							}}
+						/>
+						{errors.startDate && (
+							<Field.HelperText color="red" className="error">
+								{errors.startDate}
+							</Field.HelperText>
+						)}
+					</Field.Root>
+				</Fieldset.Content>
+
+				<Button type="submit" disabled={isSubmitting}>
+					{isSubmitting
+						? existingCourse
+							? 'Saving...'
+							: 'Adding...'
+						: existingCourse
+							? 'Save changes'
+							: 'Add Course'}
+				</Button>
+			</Fieldset.Root>
 		</form>
 	);
 }

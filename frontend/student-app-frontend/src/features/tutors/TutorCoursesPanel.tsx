@@ -31,6 +31,9 @@ function TutorCoursesPanel({ tutorUserId }: TutorCoursesPanelProps) {
 								Course Capacity
 							</Table.ColumnHeader>
 							<Table.ColumnHeader>
+								Course Start Date
+							</Table.ColumnHeader>
+							<Table.ColumnHeader>
 								Update Course
 							</Table.ColumnHeader>
 						</Table.Row>
@@ -40,6 +43,7 @@ function TutorCoursesPanel({ tutorUserId }: TutorCoursesPanelProps) {
 							<Table.Row key={course.id}>
 								<Table.Cell>{course.title}</Table.Cell>
 								<Table.Cell>{course.capacity}</Table.Cell>
+								<Table.Cell>{course.startDate}</Table.Cell>
 								<Table.Cell>
 									<Button
 										onClick={() => setEditingCourse(course)}
