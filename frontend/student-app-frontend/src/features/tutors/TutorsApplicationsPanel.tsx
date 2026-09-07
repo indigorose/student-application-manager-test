@@ -3,13 +3,17 @@ import useApi from '../../hooks/useApi';
 import { Table, Button } from '@chakra-ui/react';
 
 interface TutorCoursesPanelProps {
-	tutorUserId: number;
+	courseId: number;
+	onDecision: () => void;
 }
 
-function TutorApplicationsPanel({ tutorUserId }: TutorCoursesPanelProps) {
+function TutorApplicationsPanel({
+	courseId,
+	onDecision,
+}: TutorCoursesPanelProps) {
 	const { state, refreshData } = useApi(
-		() => studentApplicationsApi.getApplicationsByTutor(tutorUserId),
-		[tutorUserId],
+		() => studentApplicationsApi.getApplicationsByCourse(courseId),
+		[courseId],
 	);
 	async function handleDecision(
 		applicationId: number,
@@ -19,7 +23,14 @@ function TutorApplicationsPanel({ tutorUserId }: TutorCoursesPanelProps) {
 			status,
 		});
 		refreshData();
+		onDecision();
 	}
+
+	if (state.status === 'loading' || state.status === 'idle')
+		return <p>Loading Applications</p>;
+	if (state.status === 'error') return <p>{state.error.message}</p>;
+	if (state.data.length === 0)
+		return <p>No applications for this course yet.</p>;
 
 	return (
 		<div>

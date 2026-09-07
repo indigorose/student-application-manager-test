@@ -36,25 +36,25 @@ const studentApplicationApi: Api = {
 	async getAllApplications() {
 		return fetchJson<StudentApplication[]>(BASE_URL, 'list applications');
 	},
-	async getApplicationsByStudent(studentUserId) {
+	async getApplicationsByStudent(studentUserId: number) {
 		return fetchJson<StudentApplication[]>(
 			`${BASE_URL}?studentUserId=${studentUserId}`,
 			'list applications by Student.',
 		);
 	},
-	async getApplicationsByTutor(tutorUserId) {
+	async getApplicationsByTutor(tutorUserId: number) {
 		return fetchJson<StudentApplication[]>(
 			`${BASE_URL}?studentUserId=${tutorUserId}`,
 			'list applications by Student.',
 		);
 	},
-	async getApplicationsByCourse(courseId) {
+	async getApplicationsByCourse(courseId: number) {
 		return fetchJson<StudentApplication[]>(
 			`${BASE_URL}?courseId=${courseId}`,
 			'list applications by course.',
 		);
 	},
-	async getApplication(applicationId) {
+	async getApplication(applicationId: number) {
 		return fetchJson<StudentApplication>(
 			`${BASE_URL}/=${applicationId}`,
 			'Get application by ID.',
@@ -71,7 +71,7 @@ const studentApplicationApi: Api = {
 			},
 		);
 	},
-	async submitDraft(applicationId) {
+	async submitDraft(applicationId: number) {
 		return fetchJson<StudentApplication>(
 			`${BASE_URL}/${applicationId}/submit`,
 			`submit application: ${applicationId}`,
@@ -115,7 +115,7 @@ const studentApplicationApi: Api = {
 			},
 		);
 	},
-	async deleteApplication(applicationId) {
+	async deleteApplication(applicationId: number) {
 		const response = await fetch(`${BASE_URL}/${applicationId}`, {
 			method: 'DELETE',
 		});

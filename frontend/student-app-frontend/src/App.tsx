@@ -20,7 +20,7 @@ function App() {
 				Back to role selection
 			</Button>
 			{selectedRole === 'STUDENT' && <StudentDashboard userId={1} />}
-			{selectedRole === 'TUTOR' && <TutorDashboard userId={8} />}
+			{selectedRole === 'TUTOR' && <TutorDashboard userId={2} />}
 			{selectedRole === 'ADMIN' && <AdminDashboard />}
 		</div>
 	);

@@ -6,7 +6,6 @@ import { tutorsApi } from '../api/tutorApi';
 import TutorProfileView from '../components/TutorProfileView';
 import UpdateUserForm from '@/features/users/UpdateUserForm';
 import TutorCoursesPanel from '@/features/tutors/TutorCoursesPanel';
-import TutorApplicationsPanel from '@/features/tutors/TutorsApplicationsPanel';
 
 interface Props {
 	userId: number;
@@ -48,9 +47,6 @@ function TutorDashboard({ userId }: Props) {
 			<div>
 				<h2>My Courses</h2>
 				<TutorCoursesPanel tutorUserId={userId} />
-			</div>
-			<div>
-				<TutorApplicationsPanel tutorUserId={userId} />
 			</div>
 		</div>
 	);
