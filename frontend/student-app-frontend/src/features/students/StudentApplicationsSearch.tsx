@@ -53,15 +53,21 @@ function StudentApplicationsSearch() {
 						<Table.Row>
 							<Table.ColumnHeader>Title</Table.ColumnHeader>
 							<Table.ColumnHeader>Category</Table.ColumnHeader>
-							<Table.ColumnHeader>Capacity</Table.ColumnHeader>
+							<Table.ColumnHeader>
+								Application Status
+							</Table.ColumnHeader>
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
 						{studentApplicationsState.data.map((application) => (
 							<Table.Row key={application.id}>
-								<Table.Cell>{}</Table.Cell>
-								<Table.Cell>{}</Table.Cell>
-								<Table.Cell>{}</Table.Cell>
+								<Table.Cell>
+									{application.course.title}
+								</Table.Cell>
+								<Table.Cell>
+									{application.course.category}
+								</Table.Cell>
+								<Table.Cell>{application.status}</Table.Cell>
 							</Table.Row>
 						))}
 					</Table.Body>
