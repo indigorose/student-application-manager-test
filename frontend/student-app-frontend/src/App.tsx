@@ -21,33 +21,39 @@ function App() {
 	}
 
 	if (!selectedRole) {
-		return <RoleSelector onSelect={setSelectedRole} />;
+		return (
+			<>
+				<Header activeRole={selectedRole} onLogoClick={backToRoles} />
+				<RoleSelector onSelect={setSelectedRole} />
+			</>
+		);
 	}
 
 	return (
 		<>
-			<Header activeRole={selectedRole} />
+			<Header activeRole={selectedRole} onLogoClick={backToRoles} />
 			<Box px={6}>
 				{!selectedRole && <RoleSelector onSelect={setSelectedRole} />}
 
 				{selectedRole === 'ADMIN' && (
 					<div>
+						<AdminDashboard />
+
 						<Button onClick={backToRoles}>
 							Back to role selection
 						</Button>
-						<AdminDashboard />
 					</div>
 				)}
 				{(selectedRole === 'STUDENT' || selectedRole === 'TUTOR') &&
 					selectedUserId === null && (
 						<div>
-							<Button onClick={backToRoles}>
-								Back to role selections
-							</Button>
 							<UserPicker
 								role={selectedRole}
 								onSelect={setSelectedUserId}
-							/>
+							/>{' '}
+							<Button onClick={backToRoles}>
+								Back to role selections
+							</Button>
 						</div>
 					)}
 
