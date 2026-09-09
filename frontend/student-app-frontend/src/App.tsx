@@ -8,6 +8,7 @@ import RoleSelector from './components/RoleSelector';
 import UserPicker from './components/UserPicker';
 import { Box } from '@chakra-ui/react';
 import Header from './components/Header';
+import { RiArrowLeftLine } from 'react-icons/ri';
 
 type Role = 'STUDENT' | 'TUTOR' | 'ADMIN';
 
@@ -39,8 +40,8 @@ function App() {
 					<div>
 						<AdminDashboard />
 
-						<Button onClick={backToRoles}>
-							Back to role selection
+						<Button variant="ghost" mt="10" onClick={backToRoles}>
+							<RiArrowLeftLine /> Back to role selection
 						</Button>
 					</div>
 				)}

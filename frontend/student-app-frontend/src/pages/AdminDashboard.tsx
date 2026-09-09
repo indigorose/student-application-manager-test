@@ -1,6 +1,6 @@
 // import UserList from '../features/users/UserList';
 
-import { Tabs } from '@chakra-ui/react';
+import { Tabs, Heading } from '@chakra-ui/react';
 import TutorCourseSearch from '@/features/tutors/TutorCoursesSearch';
 import StudentApplicationsSearch from '@/features/students/StudentApplicationsSearch';
 import CourseSearch from '@/features/courses/CourseSearch';
@@ -9,7 +9,9 @@ import UserList from '@/features/users/UserList';
 function AdminDashboard() {
 	return (
 		<>
-			<h1 className="dashboard-title">Admin Dashboard</h1>
+			<Heading mx="auto" pb="20px" fontSize="2rem">
+				<h2>Admin Dashboard</h2>
+			</Heading>
 			<Tabs.Root defaultValue="userList">
 				<Tabs.List>
 					<Tabs.Trigger value="userList">User List</Tabs.Trigger>
