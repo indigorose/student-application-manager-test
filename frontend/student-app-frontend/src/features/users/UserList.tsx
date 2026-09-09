@@ -2,7 +2,7 @@ import { api } from '../../api/usersApi';
 import useApi from '../../hooks/useApi';
 import type { User } from '../../types/user';
 import CreateUserForm from './CreateUserForm';
-import { Button, Dialog, Table, Portal } from '@chakra-ui/react';
+import { Button, Dialog, Table, Portal, Box, Heading } from '@chakra-ui/react';
 import UpdateUserForm from './UpdateUserForm';
 import { useState } from 'react';
 
@@ -16,8 +16,14 @@ function UserList() {
 
 	return (
 		<>
-			<CreateUserForm onSubmitForm={refreshData} />
-			<Button onClick={refreshData}>Refresh List</Button>
+			<Box mb="20px">
+				<CreateUserForm onSubmitForm={refreshData} />
+			</Box>
+
+			<Heading size="lg" mb="20px" fontWeight="semibold">
+				User List
+			</Heading>
+
 			{state.status === 'idle' && (
 				<p>Nothing loaded yet. Please refresh.</p>
 			)}
@@ -28,7 +34,7 @@ function UserList() {
 				</p>
 			)}
 			{state.status === 'success' && (
-				<Table.Root size="md" width="500px">
+				<Table.Root size="md" width="500px" variant="outline">
 					<Table.Header>
 						<Table.Row>
 							<Table.ColumnHeader>Role</Table.ColumnHeader>
@@ -88,6 +94,10 @@ function UserList() {
 					</Dialog.Positioner>
 				</Portal>
 			</Dialog.Root>
+
+			<Button mt="20px" onClick={refreshData}>
+				Refresh User List
+			</Button>
 		</>
 	);
 }
