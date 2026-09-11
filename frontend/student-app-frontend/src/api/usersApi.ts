@@ -21,7 +21,7 @@ const BASE_URL = baseUrl('/users');
 
 export interface Api {
 	getAllUsers(): Promise<User[]>;
-	getUsersByRole(role: Role): Promise<User[] | undefined>;
+	getUsersByRole(role: Role): Promise<User[]>;
 	getUser(id: number): Promise<User | undefined>;
 	getUserByEmail(email: string): Promise<User | undefined>;
 	addUser(input: Omit<User, 'id'>): Promise<User>;

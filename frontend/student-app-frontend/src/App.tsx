@@ -52,7 +52,12 @@ function App() {
 								role={selectedRole}
 								onSelect={setSelectedUserId}
 							/>{' '}
-							<Button onClick={backToRoles}>
+							<Button
+								variant="ghost"
+								mt="10"
+								onClick={backToRoles}
+							>
+								<RiArrowLeftLine />
 								Back to role selections
 							</Button>
 						</div>
