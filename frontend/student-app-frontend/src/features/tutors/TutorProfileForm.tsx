@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { tutorsApi } from '../../api/tutorApi';
 
+import { Input, Button, Fieldset, Stack, Field } from '@chakra-ui/react';
+
 interface TutorProfileFormProps {
 	userId: number;
 	onCreated: () => void;
@@ -62,45 +64,89 @@ function TutorProfileForm({ userId, onCreated }: TutorProfileFormProps) {
 
 	return (
 		<form onSubmit={handleSubmit}>
-			<input
-				value={firstName}
-				placeholder="First Name"
-				onChange={(event) => {
-					setFirstName(event.target.value);
-					setErrors((prev) => ({
-						...prev,
-						firstName: undefined,
-					}));
-				}}
-			/>
-			{errors.firstName && <p className="error">{errors.firstName}</p>}
-			<input
-				value={lastName}
-				placeholder="Last Name"
-				onChange={(event) => {
-					setLastName(event.target.value);
-					setErrors((prev) => ({
-						...prev,
-						lastName: undefined,
-					}));
-				}}
-			/>
-			{errors.lastName && <p className="error">{errors.lastName}</p>}
-			<input
-				value={department}
-				placeholder="Department"
-				onChange={(event) => {
-					setDepartment(event.target.value);
-					setErrors((prev) => ({
-						...prev,
-						dob: undefined,
-					}));
-				}}
-			/>
-			{errors.department && <p className="error">{errors.department}</p>}
-			<button type="submit" disabled={isSubmitting}>
-				{isSubmitting ? 'Adding…' : 'Add tutor profile'}
-			</button>
+			<Fieldset.Root
+				size="md"
+				maxW="md"
+				mb="20px"
+				borderColor="red.400"
+				borderWidth="1px"
+			>
+				<Stack>
+					<Fieldset.Legend>Create a Tutor Profile</Fieldset.Legend>
+					<Fieldset.HelperText>
+						Add your name and department to gain Tutor Dashboard
+						access.
+					</Fieldset.HelperText>
+				</Stack>
+				<Fieldset.Content>
+					<Field.Root>
+						<Field.Label>First Name</Field.Label>
+						<Input
+							value={firstName}
+							placeholder="First Name"
+							onChange={(event) => {
+								setFirstName(event.target.value);
+								setErrors((prev) => ({
+									...prev,
+									firstName: undefined,
+								}));
+							}}
+						/>
+						{errors.firstName && (
+							<Field.HelperText color="red">
+								{' '}
+								{errors.firstName}
+							</Field.HelperText>
+						)}
+					</Field.Root>
+					<Field.Root>
+						<Field.Label>Last Name</Field.Label>
+						<Input
+							value={lastName}
+							placeholder="Last Name"
+							onChange={(event) => {
+								setLastName(event.target.value);
+								setErrors((prev) => ({
+									...prev,
+									lastName: undefined,
+								}));
+							}}
+						/>
+						{errors.lastName && (
+							<Field.HelperText color="red">
+								{errors.lastName}
+							</Field.HelperText>
+						)}
+					</Field.Root>
+					<Field.Root>
+						<Field.Label>Department</Field.Label>
+						<Input
+							value={department}
+							placeholder="Department"
+							onChange={(event) => {
+								setDepartment(event.target.value);
+								setErrors((prev) => ({
+									...prev,
+									dob: undefined,
+								}));
+							}}
+						/>
+						{errors.department && (
+							<Field.HelperText color="red">
+								{errors.department}
+							</Field.HelperText>
+						)}
+					</Field.Root>
+				</Fieldset.Content>{' '}
+				<Button
+					mt="20px"
+					alignSelf="flex-start"
+					type="submit"
+					disabled={isSubmitting}
+				>
+					{isSubmitting ? 'Adding…' : 'Add Tutor Profile'}
+				</Button>
+			</Fieldset.Root>
 		</form>
 	);
 }
