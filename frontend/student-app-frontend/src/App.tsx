@@ -66,16 +66,22 @@ function App() {
 				{(selectedRole === 'STUDENT' || selectedRole === 'TUTOR') &&
 					selectedUserId !== null && (
 						<div>
-							<Button onClick={() => setSelectedUserId(null)}>
-								Choose a different{' '}
-								{selectedRole.toLocaleLowerCase()}
-							</Button>
 							{selectedRole === 'STUDENT' && (
 								<StudentDashboard userId={selectedUserId} />
 							)}
 							{selectedRole === 'TUTOR' && (
 								<TutorDashboard userId={selectedUserId} />
 							)}
+
+							<Button
+								variant="ghost"
+								mt="10"
+								onClick={() => setSelectedUserId(null)}
+							>
+								<RiArrowLeftLine />
+								Choose a different{' '}
+								{selectedRole.toLocaleLowerCase()}
+							</Button>
 						</div>
 					)}
 			</Box>

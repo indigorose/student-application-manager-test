@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { User } from '../../types/user';
 import { api } from '../../api/usersApi';
-import { Input, Button, Stack } from '@chakra-ui/react';
+import { Input, Button, Stack, Fieldset, Field } from '@chakra-ui/react';
 interface UpdateUserFormProps {
 	user: User;
 	onUpdated: () => void;
@@ -12,7 +12,7 @@ function UpdateUserForm({ user, onUpdated }: UpdateUserFormProps) {
 	const [password, setPassword] = useState('');
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+	async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
 		event.preventDefault();
 		setIsSubmitting(true);
 		try {
@@ -29,22 +29,41 @@ function UpdateUserForm({ user, onUpdated }: UpdateUserFormProps) {
 
 	return (
 		<form onSubmit={handleSubmit}>
-			<Stack gap={3}>
-				<Input
-					value={email}
-					onChange={(event) => setEmail(event.target.value)}
-					placeholder="Email"
-				/>
-				<Input
-					type="password"
-					value={password}
-					onChange={(event) => setPassword(event.target.value)}
-					placeholder="New Password (leave blank to keep current password)"
-				/>
-				<Button type="submit" disabled={isSubmitting}>
+			<Fieldset.Root size="md" maxW="md" mb="20px">
+				<Stack gap={3}>
+					<Fieldset.Legend fontSize="16px">
+						Reset user details
+					</Fieldset.Legend>
+					<Fieldset.HelperText>
+						Update your email or reset your password
+					</Fieldset.HelperText>
+				</Stack>
+				<Field.Root>
+					<Field.Label>Reset Email Address</Field.Label>
+					<Input
+						value={email}
+						onChange={(event) => setEmail(event.target.value)}
+						placeholder="Email"
+					/>
+				</Field.Root>
+				<Field.Root>
+					<Field.Label>Reset Password</Field.Label>{' '}
+					<Input
+						type="password"
+						value={password}
+						onChange={(event) => setPassword(event.target.value)}
+						placeholder="New Password (leave blank to keep current password)"
+					/>
+				</Field.Root>
+				<Button
+					mt="20px"
+					alignSelf="flex-start"
+					type="submit"
+					disabled={isSubmitting}
+				>
 					{isSubmitting ? 'Saving…' : 'Save Changes'}
 				</Button>
-			</Stack>
+			</Fieldset.Root>
 		</form>
 	);
 }
