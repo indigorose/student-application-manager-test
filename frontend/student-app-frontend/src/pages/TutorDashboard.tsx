@@ -1,21 +1,35 @@
 // Tutor Dashboard to view profiles, courses and applications
-
+import { useState } from 'react';
 import useApi from '../hooks/useApi';
 import TutorProfileForm from '../features/tutors/TutorProfileForm';
 import { tutorsApi } from '../api/tutorApi';
 import TutorProfileView from '../components/TutorProfileView';
 import UpdateUserForm from '@/features/users/UpdateUserForm';
 import TutorCoursesPanel from '@/features/tutors/TutorCoursesPanel';
-import { Stack, Box, Heading, Tabs } from '@chakra-ui/react';
-interface Props {
+import {
+	Stack,
+	Box,
+	Heading,
+	Tabs,
+	Text,
+	Button,
+	Dialog,
+	Portal,
+} from '@chakra-ui/react';
+import { api } from '../api/usersApi';
+interface TutorDashboardProps {
 	userId: number;
+	onDeactivated: () => void;
 }
 
-function TutorDashboard({ userId }: Props) {
+function TutorDashboard({ userId, onDeactivated }: TutorDashboardProps) {
 	const { state: tutorState, refreshData: reloadTutor } = useApi(
 		() => tutorsApi.getTutorById(userId),
 		[userId],
 	);
+
+	const [confirmingDeactivate, setConfirmingDeactivate] = useState(false);
+
 	if (tutorState.status === 'loading' || tutorState.status === 'idle') {
 		return <p>Loading...</p>;
 	}
@@ -28,6 +42,11 @@ function TutorDashboard({ userId }: Props) {
 	}
 
 	const tutor = tutorState.data;
+
+	async function handleDeactivate() {
+		await api.deactivateUser(userId);
+		onDeactivated();
+	}
 
 	return (
 		<div>
@@ -66,6 +85,61 @@ function TutorDashboard({ userId }: Props) {
 								existingTutor={tutor}
 								onCreated={reloadTutor}
 							/>
+						</Box>
+						<Box borderTopWidth={1} pt={4}>
+							<Heading size="sm" mb={2} color="red.600">
+								Danger Zone
+							</Heading>
+							<Text fontSize="sm" color="gray.500" mb={2}>
+								Deactivating your account will sign you out and
+								hide your profile from the listings.
+							</Text>
+							<Button
+								colorPalette="red"
+								onClick={() => setConfirmingDeactivate(true)}
+							>
+								Deactivate my account
+							</Button>
+							<Dialog.Root
+								open={confirmingDeactivate}
+								onOpenChange={(event) =>
+									setConfirmingDeactivate(event.open)
+								}
+							>
+								<Portal>
+									<Dialog.Backdrop />
+									<Dialog.Positioner>
+										<Dialog.Content>
+											<Dialog.Header>
+												Deactivate account?
+											</Dialog.Header>
+											<Dialog.Body>
+												This will sign you out. An admin
+												can reactivate your account
+												later.
+											</Dialog.Body>
+											<Dialog.Footer>
+												<Button
+													variant="outline"
+													onClick={() =>
+														setConfirmingDeactivate(
+															false,
+														)
+													}
+												>
+													Cancel
+												</Button>
+												<Button
+													colorPalette="red"
+													onClick={handleDeactivate}
+												>
+													Deactivate
+												</Button>
+											</Dialog.Footer>
+										</Dialog.Content>
+									</Dialog.Positioner>
+								</Portal>
+							</Dialog.Root>
 						</Box>
 					</Stack>
 				</Tabs.Content>

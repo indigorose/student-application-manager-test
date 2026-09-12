@@ -70,7 +70,10 @@ function App() {
 								<StudentDashboard userId={selectedUserId} />
 							)}
 							{selectedRole === 'TUTOR' && (
-								<TutorDashboard userId={selectedUserId} />
+								<TutorDashboard
+									userId={selectedUserId}
+									onDeactivated={backToRoles}
+								/>
 							)}
 
 							<Button
