@@ -1,5 +1,7 @@
 // Display a tutor's profile
 import type { Tutor } from '../types/tutor';
+import { IconButton, Card } from '@chakra-ui/react';
+import { RefreshCw } from 'lucide-react';
 
 interface TutorProfileViewProps {
 	tutor: Tutor;
@@ -9,13 +11,21 @@ interface TutorProfileViewProps {
 function TutorProfileView({ tutor, onUpdated }: TutorProfileViewProps) {
 	return (
 		<div>
-			<p>
-				{tutor.firstName} {tutor.lastName}
-			</p>
-			<p>Email: {tutor.user.email}</p>
-			<p>Department: {tutor.department}</p>
-
-			<button onClick={onUpdated}>Update data</button>
+			<Card.Root>
+				<Card.Body>
+					{' '}
+					<Card.Title>
+						{tutor.firstName} {tutor.lastName}
+					</Card.Title>
+					<p>Email: {tutor.user.email}</p>
+					<p>Department: {tutor.department}</p>
+				</Card.Body>
+				<Card.Footer justifyContent="flex-end">
+					<IconButton size="xs" onClick={onUpdated}>
+						<RefreshCw />
+					</IconButton>
+				</Card.Footer>
+			</Card.Root>
 		</div>
 	);
 }
