@@ -3,7 +3,14 @@ import { useState } from 'react';
 import { studentApplicationsApi } from '../../api/studentApplicationApi';
 import useApi from '@/hooks/useApi';
 import { coursesApi } from '@/api/coursesApi';
-import { NativeSelect } from '@chakra-ui/react';
+import {
+	NativeSelect,
+	Fieldset,
+	Stack,
+	Field,
+	Input,
+	Button,
+} from '@chakra-ui/react';
 
 interface StudentApplicationFormProps {
 	studentUserId: number;
@@ -62,40 +69,71 @@ function StudentApplicationForm({
 	}
 	return (
 		<form onSubmit={handleSubmit}>
-			{coursesState.status === 'success' && (
-				<NativeSelect.Root width="350px">
-					<NativeSelect.Field
-						placeholder="Select a course"
-						value={courseId}
-						onChange={(event) => setCourseId(event.target.value)}
-					>
-						{coursesState.data.map((course) => (
-							<option key={course.id} value={course.id}>
-								{course.title}
-							</option>
-						))}
-					</NativeSelect.Field>
-				</NativeSelect.Root>
-			)}
-			{errors.courseId && <p className="error">{errors.courseId}</p>}
-
-			<input
-				value={personalStatement}
-				placeholder="Personal Statement"
-				onChange={(event) => {
-					setPersonalStatement(event.target.value);
-					setErrors((prev) => ({
-						...prev,
-						personalStatement: undefined,
-					}));
-				}}
-			/>
-			{errors.personalStatement && (
-				<p className="error">{errors.personalStatement}</p>
-			)}
-			<button type="submit" disabled={isSubmitting}>
-				{isSubmitting ? 'Adding…' : 'Save as draft'}
-			</button>
+			<Fieldset.Root size="md" maxW="md" mb="30px">
+				<Stack>
+					<Fieldset.Legend>Application Form</Fieldset.Legend>
+					<Fieldset.HelperText>
+						Apply for courses below
+					</Fieldset.HelperText>
+				</Stack>
+				<Fieldset.Content>
+					<Field.Root>
+						<Field.Label>Select a course</Field.Label>
+						{coursesState.status === 'success' && (
+							<NativeSelect.Root width="350px">
+								<NativeSelect.Field
+									placeholder="Courses 2026-27"
+									value={courseId}
+									onChange={(event) =>
+										setCourseId(event.target.value)
+									}
+								>
+									{coursesState.data.map((course) => (
+										<option
+											key={course.id}
+											value={course.id}
+										>
+											{course.title}
+										</option>
+									))}
+								</NativeSelect.Field>
+							</NativeSelect.Root>
+						)}
+						{errors.courseId && (
+							<Field.HelperText color="red">
+								{errors.courseId}
+							</Field.HelperText>
+						)}
+					</Field.Root>
+					<Field.Root>
+						<Field.Label>Personal Statement</Field.Label>
+						<Input
+							value={personalStatement}
+							placeholder="Personal Statement"
+							onChange={(event) => {
+								setPersonalStatement(event.target.value);
+								setErrors((prev) => ({
+									...prev,
+									personalStatement: undefined,
+								}));
+							}}
+						/>
+						{errors.personalStatement && (
+							<Field.HelperText color="red">
+								{errors.personalStatement}
+							</Field.HelperText>
+						)}
+					</Field.Root>
+				</Fieldset.Content>
+				<Button
+					type="submit"
+					mt="20px"
+					alignSelf="flex-start"
+					disabled={isSubmitting}
+				>
+					{isSubmitting ? 'Adding…' : 'Save as draft'}
+				</Button>
+			</Fieldset.Root>
 		</form>
 	);
 }
