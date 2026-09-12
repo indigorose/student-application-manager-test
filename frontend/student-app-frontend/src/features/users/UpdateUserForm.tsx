@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { User } from '../../types/user';
 import { api } from '../../api/usersApi';
 import { Input, Button, Stack, Fieldset, Field } from '@chakra-ui/react';
+import { PasswordInput } from '@/components/ui/password-input';
 interface UpdateUserFormProps {
 	user: User;
 	onUpdated: () => void;
@@ -31,7 +32,7 @@ function UpdateUserForm({ user, onUpdated }: UpdateUserFormProps) {
 		<form onSubmit={handleSubmit}>
 			<Fieldset.Root size="md" maxW="md" mb="20px">
 				<Stack gap={3}>
-					<Fieldset.Legend fontSize="16px">
+					<Fieldset.Legend fontSize="14px">
 						Reset user details
 					</Fieldset.Legend>
 					<Fieldset.HelperText>
@@ -43,12 +44,11 @@ function UpdateUserForm({ user, onUpdated }: UpdateUserFormProps) {
 					<Input
 						value={email}
 						onChange={(event) => setEmail(event.target.value)}
-						placeholder="Email"
 					/>
 				</Field.Root>
 				<Field.Root>
 					<Field.Label>Reset Password</Field.Label>{' '}
-					<Input
+					<PasswordInput
 						type="password"
 						value={password}
 						onChange={(event) => setPassword(event.target.value)}
