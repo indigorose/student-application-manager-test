@@ -6,6 +6,8 @@ import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 
+import com.studentappmanager.backend.student_applications.StudentApplication;
+import com.studentappmanager.backend.student_applications.StudentApplicationRepository;
 import com.studentappmanager.backend.tutor.Tutor;
 import com.studentappmanager.backend.tutor.TutorRepository;
 
@@ -13,10 +15,13 @@ import com.studentappmanager.backend.tutor.TutorRepository;
 public class CourseService {
     private final CourseRepository courseRepository;
     private final TutorRepository tutorRepository;
+    private final StudentApplicationRepository studentApplicationRepository;
 
-    public CourseService(CourseRepository courseRepository, TutorRepository tutorRepository) {
+    public CourseService(CourseRepository courseRepository, TutorRepository tutorRepository,
+            StudentApplicationRepository studentApplicationRepository) {
         this.courseRepository = courseRepository;
         this.tutorRepository = tutorRepository;
+        this.studentApplicationRepository = studentApplicationRepository;
     }
 
     // List all the courses
@@ -65,6 +70,13 @@ public class CourseService {
     public void deleteCourse(Long courseId) {
         if (!courseRepository.existsById(courseId)) {
             throw new NoSuchElementException("Course not found with course id: " + courseId);
+        }
+
+        List<StudentApplication> applications = studentApplicationRepository.findByCourseId(courseId);
+
+        if (!applications.isEmpty()) {
+            throw new IllegalStateException(
+                    "Cannot delete this course - " + applications.size() + " application(s) exist against it.");
         }
         courseRepository.deleteById(courseId);
     }
