@@ -1,8 +1,8 @@
+import { useState } from 'react';
 import useApi from '@/hooks/useApi';
 import { coursesApi } from '../../api/coursesApi';
 import CourseForm from '../courses/CourseForm';
 import { Table, Button, Dialog, Portal } from '@chakra-ui/react';
-import { useState } from 'react';
 import type { Course } from '../../types/course';
 import TutorApplicationsPanel from './TutorsApplicationsPanel';
 
@@ -19,7 +19,14 @@ function TutorCoursesPanel({ tutorUserId }: TutorCoursesPanelProps) {
 	const [reviewingCourseId, setReviewingCourseId] = useState<number | null>(
 		null,
 	);
-	console.log(typeof reviewingCourseId);
+	// console.log(typeof reviewingCourseId);
+	const [confirmingWithdrawal, setConfirmingWithdrawal] = useState(false);
+
+	async function handleWithdrawal(id: number) {
+		await coursesApi.deleteCourse(id);
+		setConfirmingWithdrawal(false);
+		refreshData();
+	}
 
 	return (
 		<div>
@@ -45,6 +52,9 @@ function TutorCoursesPanel({ tutorUserId }: TutorCoursesPanelProps) {
 								</Table.ColumnHeader>
 								<Table.ColumnHeader>
 									Review Applications
+								</Table.ColumnHeader>
+								<Table.ColumnHeader>
+									Withdraw Course
 								</Table.ColumnHeader>
 							</Table.Row>
 						</Table.Header>
@@ -78,6 +88,62 @@ function TutorCoursesPanel({ tutorUserId }: TutorCoursesPanelProps) {
 												? 'Hide Applications'
 												: 'Review applications'}
 										</Button>
+									</Table.Cell>
+									<Table.Cell>
+										<Button
+											colorPalette="red"
+											onClick={() =>
+												setConfirmingWithdrawal(true)
+											}
+										>
+											Withdraw
+										</Button>
+										<Dialog.Root
+											open={confirmingWithdrawal}
+											onOpenChange={(event) =>
+												setConfirmingWithdrawal(
+													event.open,
+												)
+											}
+										>
+											<Portal>
+												<Dialog.Backdrop />
+												<Dialog.Positioner>
+													<Dialog.Content>
+														<Dialog.Header>
+															Deactivate course?
+														</Dialog.Header>
+														<Dialog.Body>
+															Withdrawn courses
+															must be resubmitted
+															to the database.
+														</Dialog.Body>
+														<Dialog.Footer>
+															<Button
+																variant="outline"
+																onClick={() =>
+																	setConfirmingWithdrawal(
+																		false,
+																	)
+																}
+															>
+																Cancel
+															</Button>
+															<Button
+																colorPalette="red"
+																onClick={
+																	void handleWithdrawal(
+																		course.id,
+																	)
+																}
+															>
+																Deactivate
+															</Button>
+														</Dialog.Footer>
+													</Dialog.Content>
+												</Dialog.Positioner>
+											</Portal>
+										</Dialog.Root>
 									</Table.Cell>
 								</Table.Row>
 							))}

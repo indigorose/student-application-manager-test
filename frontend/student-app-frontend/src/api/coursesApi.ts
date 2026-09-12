@@ -9,6 +9,7 @@ export interface Api {
 	addCourse(input: NewCourseRequest): Promise<Course>;
 	getCourseByTutorId(id: number): Promise<Course[]>;
 	updateCourse(id: number, input: NewCourseRequest): Promise<Course>;
+	deleteCourse(id: number): Promise<void>;
 }
 
 const courseApi: Api = {
@@ -45,6 +46,13 @@ const courseApi: Api = {
 			`${BASE_URL}?tutorUserId=${id}`,
 			"list all the tutor's courses.",
 		);
+	},
+	// Delete course by courseId
+	async deleteCourse(id: number) {
+		const response = await fetch(`${BASE_URL}/${id}`, {
+			method: 'DELETE',
+		});
+		await ensureOk(response, `Delete course ${id}`);
 	},
 };
 
