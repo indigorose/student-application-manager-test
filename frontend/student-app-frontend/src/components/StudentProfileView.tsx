@@ -1,4 +1,6 @@
 import type { Student } from '../types/student';
+import { IconButton, Card } from '@chakra-ui/react';
+import { RefreshCw } from 'lucide-react';
 
 interface StudentProfileViewProps {
 	student: Student;
@@ -8,14 +10,22 @@ interface StudentProfileViewProps {
 function StudentProfileView({ student, onUpdated }: StudentProfileViewProps) {
 	return (
 		<div>
-			<p>
-				{student.firstName} {student.lastName}
-			</p>
-			<p>Email: {student.user.email}</p>
-			<p>DOB: {student.dob}</p>
-			<p>Phone: {student.phone}</p>
-			<p>Address: {student.address}</p>
-			<button onClick={onUpdated}>Update data</button>
+			<Card.Root>
+				<Card.Body>
+					<Card.Title>
+						{student.firstName} {student.lastName}
+					</Card.Title>
+					<p>Email: {student.user.email}</p>
+					<p>DOB: {student.dob}</p>
+					<p>Phone: {student.phone}</p>
+					<p>Address: {student.address}</p>
+				</Card.Body>
+				<Card.Footer justifyContent="flex-end">
+					<IconButton size="xs" onClick={onUpdated}>
+						<RefreshCw />
+					</IconButton>
+				</Card.Footer>
+			</Card.Root>
 		</div>
 	);
 }
