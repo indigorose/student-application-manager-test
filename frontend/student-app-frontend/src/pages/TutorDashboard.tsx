@@ -49,7 +49,7 @@ function TutorDashboard({ userId }: Props) {
 				<Tabs.Content value="edit">
 					<Stack gap={6}>
 						<Box>
-							<Heading size="sm" mb={2}>
+							<Heading size="lg" mb={2}>
 								Account
 							</Heading>
 							<UpdateUserForm
@@ -63,6 +63,7 @@ function TutorDashboard({ userId }: Props) {
 							</Heading>
 							<TutorProfileForm
 								userId={userId}
+								existingTutor={tutor}
 								onCreated={reloadTutor}
 							/>
 						</Box>

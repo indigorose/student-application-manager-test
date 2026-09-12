@@ -8,7 +8,7 @@ export interface Api {
 	getAllTutors(): Promise<Tutor[]>;
 	getTutorById(id: number): Promise<Tutor | undefined>;
 	addTutor(id: number, input: NewTutorRequest): Promise<Tutor>;
-	//Update a tutor
+	updateTutor(userId: number, request: NewTutorRequest): Promise<Tutor>;
 }
 
 const tutorApi: Api = {
@@ -33,6 +33,17 @@ const tutorApi: Api = {
 			{
 				method: 'POST',
 				body: JSON.stringify(input),
+			},
+		);
+	},
+	// Update a tutor
+	async updateTutor(userId: number, request: NewTutorRequest) {
+		return fetchJson<Tutor>(
+			`${BASE_URL}/${userId}`,
+			`update tutor ${userId}`,
+			{
+				method: 'PUT',
+				body: JSON.stringify(request),
 			},
 		);
 	},
