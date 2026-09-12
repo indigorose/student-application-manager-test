@@ -1,13 +1,20 @@
 // Student profile creation
 import { useState } from 'react';
 import { studentsApi } from '../../api/studentApi';
+import type { Student } from '../../types/student';
+import { Input, Button, Fieldset, Stack, Field } from '@chakra-ui/react';
 
 interface StudentProfileFormProps {
 	userId: number;
+	existingStudent?: Student;
 	onCreated: () => void;
 }
 
-function StudentProfileForm({ userId, onCreated }: StudentProfileFormProps) {
+function StudentProfileForm({
+	userId,
+	existingStudent,
+	onCreated,
+}: StudentProfileFormProps) {
 	interface FormErrors {
 		firstName?: string;
 		lastName?: string;
@@ -42,11 +49,13 @@ function StudentProfileForm({ userId, onCreated }: StudentProfileFormProps) {
 		return errors;
 	}
 
-	const [firstName, setFirstName] = useState('');
-	const [lastName, setLastName] = useState('');
-	const [dob, setDob] = useState('');
-	const [phone, setPhone] = useState('');
-	const [address, setAddress] = useState('');
+	const [firstName, setFirstName] = useState(
+		existingStudent?.firstName ?? '',
+	);
+	const [lastName, setLastName] = useState(existingStudent?.lastName ?? '');
+	const [dob, setDob] = useState(existingStudent?.dob ?? '');
+	const [phone, setPhone] = useState(existingStudent?.phone ?? '');
+	const [address, setAddress] = useState(existingStudent?.address ?? '');
 	const [errors, setErrors] = useState<FormErrors>({});
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -59,13 +68,23 @@ function StudentProfileForm({ userId, onCreated }: StudentProfileFormProps) {
 		}
 		setIsSubmitting(true);
 		try {
-			await studentsApi.addStudent(userId, {
-				firstName,
-				lastName,
-				dob,
-				phone,
-				address,
-			});
+			if (existingStudent) {
+				await studentsApi.updateStudent(userId, {
+					firstName,
+					lastName,
+					dob,
+					phone,
+					address,
+				});
+			} else {
+				await studentsApi.addStudent(userId, {
+					firstName,
+					lastName,
+					dob,
+					phone,
+					address,
+				});
+			}
 			setFirstName('');
 			setLastName('');
 			setDob('');
@@ -79,69 +98,121 @@ function StudentProfileForm({ userId, onCreated }: StudentProfileFormProps) {
 
 	return (
 		<form onSubmit={handleSubmit}>
-			<input
-				value={firstName}
-				placeholder="First Name"
-				onChange={(event) => {
-					setFirstName(event.target.value);
-					setErrors((prev) => ({
-						...prev,
-						firstName: undefined,
-					}));
-				}}
-			/>
-			{errors.firstName && <p className="error">{errors.firstName}</p>}
-			<input
-				value={lastName}
-				placeholder="Last Name"
-				onChange={(event) => {
-					setLastName(event.target.value);
-					setErrors((prev) => ({
-						...prev,
-						lastName: undefined,
-					}));
-				}}
-			/>
-			{errors.lastName && <p className="error">{errors.lastName}</p>}
-			<input
-				value={dob}
-				placeholder="Date of Birth"
-				onChange={(event) => {
-					setDob(event.target.value);
-					setErrors((prev) => ({
-						...prev,
-						dob: undefined,
-					}));
-				}}
-			/>
-			{errors.dob && <p className="error">{errors.dob}</p>}
-			<input
-				value={phone}
-				placeholder="xxx-xxxx-xxxx"
-				onChange={(event) => {
-					setPhone(event.target.value);
-					setErrors((prev) => ({
-						...prev,
-						phone: undefined,
-					}));
-				}}
-			/>
-			{errors.phone && <p className="error">{errors.phone}</p>}
-			<input
-				value={address}
-				placeholder="Address..."
-				onChange={(event) => {
-					setAddress(event.target.value);
-					setErrors((prev) => ({
-						...prev,
-						address: undefined,
-					}));
-				}}
-			/>
-			{errors.address && <p className="error">{errors.address}</p>}
-			<button type="submit" disabled={isSubmitting}>
-				{isSubmitting ? 'Adding…' : 'Add student profile'}
-			</button>
+			<Fieldset.Root size="md" maxW="md" mb="20px">
+				<Stack>
+					<Fieldset.Legend>
+						{!existingStudent ? 'Create a Student Profile' : ''}
+					</Fieldset.Legend>
+					<Fieldset.HelperText>
+						{!existingStudent
+							? 'Add your details to gain access to the student dashboard.'
+							: 'Update your details below'}
+					</Fieldset.HelperText>
+				</Stack>
+				<Fieldset.Content>
+					<Field.Root>
+						<Field.Label>First Name</Field.Label>
+						<Input
+							value={firstName}
+							onChange={(event) => {
+								setFirstName(event.target.value);
+								setErrors((prev) => ({
+									...prev,
+									firstName: undefined,
+								}));
+							}}
+						/>
+						{errors.firstName && (
+							<Field.HelperText color="red">
+								{' '}
+								{errors.firstName}
+							</Field.HelperText>
+						)}
+					</Field.Root>
+					<Field.Root>
+						<Field.Label>Last Name</Field.Label>
+						<Input
+							value={lastName}
+							onChange={(event) => {
+								setLastName(event.target.value);
+								setErrors((prev) => ({
+									...prev,
+									lastName: undefined,
+								}));
+							}}
+						/>
+						{errors.lastName && (
+							<Field.HelperText color="red">
+								{errors.lastName}
+							</Field.HelperText>
+						)}
+					</Field.Root>
+					<Field.Root>
+						<Field.Label>Date of Birth</Field.Label>
+						<Input
+							value={dob}
+							onChange={(event) => {
+								setDob(event.target.value);
+								setErrors((prev) => ({
+									...prev,
+									dob: undefined,
+								}));
+							}}
+						/>
+						{errors.dob && (
+							<Field.HelperText color="red">
+								{errors.dob}
+							</Field.HelperText>
+						)}
+					</Field.Root>
+					<Field.Root>
+						<Field.Label>Phone</Field.Label>
+						<Input
+							value={phone}
+							onChange={(event) => {
+								setPhone(event.target.value);
+								setErrors((prev) => ({
+									...prev,
+									phone: undefined,
+								}));
+							}}
+						/>
+						{errors.phone && (
+							<Field.HelperText color="red">
+								{errors.phone}
+							</Field.HelperText>
+						)}
+					</Field.Root>
+					<Field.Root>
+						<Field.Label>Address</Field.Label>
+						<Input
+							value={address}
+							onChange={(event) => {
+								setAddress(event.target.value);
+								setErrors((prev) => ({
+									...prev,
+									address: undefined,
+								}));
+							}}
+						/>
+						{errors.address && (
+							<Field.HelperText className="error">
+								{errors.address}
+							</Field.HelperText>
+						)}
+					</Field.Root>
+				</Fieldset.Content>
+				<Button
+					mt="20px"
+					alignSelf="flex-start"
+					type="submit"
+					disabled={isSubmitting}
+				>
+					{isSubmitting || existingStudent
+						? 'Save Changes'
+						: 'Add Student Profile'}
+				</Button>
+			</Fieldset.Root>
 		</form>
 	);
 }

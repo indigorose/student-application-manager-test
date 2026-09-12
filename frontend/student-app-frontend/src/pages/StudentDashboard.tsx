@@ -85,7 +85,7 @@ function StudentDashboard({ userId, onDeactivated }: StudentDashboardProps) {
 							</Heading>
 							<StudentProfileForm
 								userId={userId}
-								// existingStudent={student}
+								existingStudent={student}
 								onCreated={reloadStudent}
 							/>
 						</Box>

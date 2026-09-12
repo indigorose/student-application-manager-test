@@ -9,10 +9,7 @@ export interface Api {
 	getAllStudents(): Promise<Student[]>;
 	getStudentById(id: number): Promise<Student | undefined>;
 	addStudent(id: number, input: NewStudentRequest): Promise<Student>;
-	// updateStudentProfile(
-	// 	id: number,
-	// 	patch: UpdateStudentRequest,
-	// ): Promise<Student>;
+	updateStudent(userId: number, request: NewStudentRequest): Promise<Student>;
 }
 
 const studentApi: Api = {
@@ -41,12 +38,16 @@ const studentApi: Api = {
 		);
 	},
 	// Update student profile
-	// async updateStudentProfile(id: number, patch: UpdateStudentRequest){
-	//     return fetchJson<Student>(BASE_URL, `update student profile: ${id}`), {
-	//         method: 'PUT',
-	//         body: JSON.stringify(patch),
-	//     }
-	// }
+	async updateStudent(userId: number, request: NewStudentRequest) {
+		return fetchJson<Student>(
+			`${BASE_URL}/${userId}`,
+			`update student profile: ${userId}`,
+			{
+				method: 'PUT',
+				body: JSON.stringify(request),
+			},
+		);
+	},
 };
 
 export const studentsApi: Api = studentApi;
