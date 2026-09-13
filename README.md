@@ -76,7 +76,7 @@ Deactivated users:
 - can no longer have a new Student/Tutor profile created against their account
 - can no longer submit new applications if they're a deactivated student.
 
-An `activate` endpoint reverses this. 
+An `activate` endpoint reverses this.
 
 ## Getting Started
 
@@ -122,3 +122,36 @@ Runs on `http://localhost:5173` by default. The dev server expects the backend a
 ### CORS
 
 The backend only accepts cross-origin requests from `http://localhost:5173`  by default (configured in `WebConfig`). If your frontend runs on a different port, update`allowedOrigins` there and restart the backend.
+
+## API documentation
+
+Once the backend is running:
+
+- **Interactive UI:** `http://localhost:8080/swagger-ui.html`
+- **Raw OpenAPI spec:** `http://localhost:8080/v3/api-docs`
+
+Every endpoint, request/response shape, and status code (including the application state-machine guards) is documented there.
+
+## Project Structure
+
+``` txt
+backend/src/main/java/com/studentappmanager/backend/
+├── config/              # WebConfig (CORS), GlobalExceptionHandler, OpenApiConfig
+├── user/                # User entity, repository, service, controller
+├── student/             # Student profile
+├── tutor/               # Tutor profile
+├── course/              # Course/module management
+└── student_applications/ # Application entity + state machine logic
+
+frontend/student-app-frontend/src/
+├── api/                 # One file per backend resource (fetch wrappers)
+├── types/               # TypeScript interfaces matching backend DTOs
+├── hooks/               # useApi - shared fetch/loading/error state hook
+├── components/          # Reusable, domain-agnostic UI (StatusBadge, Header, etc.)
+└── features/            # One folder per resource: forms, lists, dashboards
+    ├── users/
+    ├── students/
+    ├── tutors/
+    ├── courses/
+    └── applications/
+```
