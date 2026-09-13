@@ -59,10 +59,11 @@ public class StudentController {
     }
 
     // Update(PUT) a single Student
-    @PutMapping("/{id}")
-    public Student updateStudent(@PathVariable Long id, @RequestBody Student updatedStudent) {
+    @PutMapping("/{userId}")
+    public Student updateStudent(@PathVariable Long userId, @RequestBody StudentRequest request) {
         try {
-            return studentService.updateStudent(id, updatedStudent);
+            return studentService.updateStudent(userId, request.firstName(), request.lastName(), request.dob(),
+                    request.phone(), request.address());
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

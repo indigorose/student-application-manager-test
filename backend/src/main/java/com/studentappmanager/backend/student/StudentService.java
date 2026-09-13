@@ -50,15 +50,15 @@ public class StudentService {
     }
 
     // Update a Student
-    public Student updateStudent(Long id, Student updatedStudent) {
-        Student existingStudent = studentRepository.findById(id).orElseThrow(() -> new NoSuchElementException(
-                "student not found with id: " + id));
-        existingStudent.setUser(updatedStudent.getUser());
-        existingStudent.setFirstName(updatedStudent.getFirstName());
-        existingStudent.setLastName(updatedStudent.getLastName());
-        existingStudent.setDob(updatedStudent.getDob());
-        existingStudent.setPhone(updatedStudent.getPhone());
-        existingStudent.setAddress(updatedStudent.getAddress());
+    public Student updateStudent(Long userId, String firstName, String lastName, LocalDate dob, String phone,
+            String address) {
+        Student existingStudent = studentRepository.findByUserId(userId).orElseThrow(() -> new NoSuchElementException(
+                "student not found with id: " + userId));
+        existingStudent.setFirstName(firstName);
+        existingStudent.setLastName(lastName);
+        existingStudent.setDob(dob);
+        existingStudent.setPhone(phone);
+        existingStudent.setAddress(address);
         return studentRepository.save(existingStudent);
     }
 
