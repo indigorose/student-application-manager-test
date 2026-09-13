@@ -2,7 +2,7 @@ import { useState } from 'react';
 import useApi from '@/hooks/useApi';
 import { coursesApi } from '../../api/coursesApi';
 import CourseForm from '../courses/CourseForm';
-import { Table, Button, Dialog, Portal } from '@chakra-ui/react';
+import { Table, Button, Dialog, Portal, Text } from '@chakra-ui/react';
 import type { Course } from '../../types/course';
 import TutorApplicationsPanel from './TutorsApplicationsPanel';
 
@@ -20,12 +20,24 @@ function TutorCoursesPanel({ tutorUserId }: TutorCoursesPanelProps) {
 		null,
 	);
 	// console.log(typeof reviewingCourseId);
-	const [confirmingWithdrawal, setConfirmingWithdrawal] = useState(false);
+	const [confirmingCourse, setConfirmingCourse] = useState<Course | null>(
+		null,
+	);
+	const [deleteError, setDeleteError] = useState<string | null>(null);
 
-	async function handleWithdrawal(id: number) {
-		await coursesApi.deleteCourse(id);
-		setConfirmingWithdrawal(false);
-		refreshData();
+	async function handleWithdrawal(courseId: number) {
+		setDeleteError(null);
+		try {
+			await coursesApi.deleteCourse(courseId);
+			setConfirmingCourse(null);
+			refreshData();
+		} catch (error) {
+			setDeleteError(
+				error instanceof Error
+					? error.message
+					: 'Failed to delete course - it may have applications against it.',
+			);
+		}
 	}
 
 	return (
@@ -93,17 +105,16 @@ function TutorCoursesPanel({ tutorUserId }: TutorCoursesPanelProps) {
 										<Button
 											colorPalette="red"
 											onClick={() =>
-												setConfirmingWithdrawal(true)
+												setConfirmingCourse(course)
 											}
 										>
 											Withdraw
 										</Button>
 										<Dialog.Root
-											open={confirmingWithdrawal}
+											open={confirmingCourse !== null}
 											onOpenChange={(event) =>
-												setConfirmingWithdrawal(
-													event.open,
-												)
+												!event.open &&
+												setConfirmingCourse(null)
 											}
 										>
 											<Portal>
@@ -111,19 +122,33 @@ function TutorCoursesPanel({ tutorUserId }: TutorCoursesPanelProps) {
 												<Dialog.Positioner>
 													<Dialog.Content>
 														<Dialog.Header>
-															Deactivate course?
+															Withdraw "
+															{
+																confirmingCourse?.title
+															}
+															"?
 														</Dialog.Header>
 														<Dialog.Body>
 															Withdrawn courses
 															must be resubmitted
 															to the database.
+															{deleteError && (
+																<Text
+																	color="red"
+																	mt={2}
+																>
+																	{
+																		deleteError
+																	}
+																</Text>
+															)}
 														</Dialog.Body>
 														<Dialog.Footer>
 															<Button
 																variant="outline"
 																onClick={() =>
-																	setConfirmingWithdrawal(
-																		false,
+																	setConfirmingCourse(
+																		null,
 																	)
 																}
 															>
@@ -131,13 +156,15 @@ function TutorCoursesPanel({ tutorUserId }: TutorCoursesPanelProps) {
 															</Button>
 															<Button
 																colorPalette="red"
-																onClick={
-																	void handleWithdrawal(
-																		course.id,
+																onClick={() =>
+																	confirmingCourse &&
+																	handleWithdrawal(
+																		confirmingCourse.id,
 																	)
 																}
 															>
-																Deactivate
+																Confirm
+																Withdrawal
 															</Button>
 														</Dialog.Footer>
 													</Dialog.Content>
