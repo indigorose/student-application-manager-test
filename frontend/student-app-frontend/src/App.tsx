@@ -67,7 +67,10 @@ function App() {
 					selectedUserId !== null && (
 						<div>
 							{selectedRole === 'STUDENT' && (
-								<StudentDashboard userId={selectedUserId} />
+								<StudentDashboard
+									userId={selectedUserId}
+									onDeactivated={backToRoles}
+								/>
 							)}
 							{selectedRole === 'TUTOR' && (
 								<TutorDashboard
