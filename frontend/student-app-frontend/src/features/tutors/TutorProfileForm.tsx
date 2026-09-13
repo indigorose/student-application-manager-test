@@ -57,7 +57,7 @@ function TutorProfileForm({
 		setIsSubmitting(true);
 		try {
 			if (existingTutor) {
-				await tutorsApi.updateTutor(userId, {
+				await tutorsApi.updateTutor(existingTutor.user.id, {
 					firstName,
 					lastName,
 					department,
@@ -69,9 +69,11 @@ function TutorProfileForm({
 					department,
 				});
 			}
-			setFirstName('');
-			setLastName('');
-			setDepartment('');
+			if (!existingTutor) {
+				setFirstName('');
+				setLastName('');
+				setDepartment('');
+			}
 			onCreated();
 		} finally {
 			setIsSubmitting(false);
@@ -137,7 +139,7 @@ function TutorProfileForm({
 								setDepartment(event.target.value);
 								setErrors((prev) => ({
 									...prev,
-									dob: undefined,
+									department: undefined,
 								}));
 							}}
 						/>
@@ -154,9 +156,13 @@ function TutorProfileForm({
 					type="submit"
 					disabled={isSubmitting}
 				>
-					{isSubmitting || existingTutor
-						? 'Save Changes'
-						: 'Add Tutor Profile'}
+					{isSubmitting
+						? existingTutor
+							? 'Saving...'
+							: 'Adding..'
+						: existingTutor
+							? 'Save Changes'
+							: 'Add Tutor Profile'}
 				</Button>
 			</Fieldset.Root>
 		</form>

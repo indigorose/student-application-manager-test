@@ -52,15 +52,14 @@ public class TutorService {
     }
 
     // Update a tutor
-    public Tutor updateTutor(Long userId, Tutor updatedTutor) {
-        Tutor existingTutor = tutorRepository.findById(
+    public Tutor updateTutor(Long userId, String firstName, String lastName, String department) {
+        Tutor existingTutor = tutorRepository.findByUserId(
                 userId).orElseThrow(
                         () -> new NoSuchElementException(
                                 "Tutor not found with id: " + userId));
-        existingTutor.setUser(updatedTutor.getUser());
-        existingTutor.setFirstName(updatedTutor.getFirstName());
-        existingTutor.setLastName(updatedTutor.getLastName());
-        existingTutor.setDepartment(updatedTutor.getDepartment());
+        existingTutor.setFirstName(firstName);
+        existingTutor.setLastName(lastName);
+        existingTutor.setDepartment(department);
         return tutorRepository.save(existingTutor);
     }
 
