@@ -10,7 +10,7 @@ function AdminDashboard() {
 	return (
 		<>
 			<Heading mx="auto" pb="20px" fontSize="2rem">
-				<h2>Admin Dashboard</h2>
+				Admin Dashboard
 			</Heading>
 			<Tabs.Root defaultValue="userList">
 				<Tabs.List>
