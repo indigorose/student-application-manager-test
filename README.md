@@ -75,3 +75,50 @@ Deactivated users:
 - disappear from default list/search endpoints(`GET /api/users`, `?role=`, `?email=`)
 - can no longer have a new Student/Tutor profile created against their account
 - can no longer submit new applications if they're a deactivated student.
+
+An `activate` endpoint reverses this. 
+
+## Getting Started
+
+### Prerequisites
+
+- Java 17+
+- Maven
+- MySQL 8
+- Node.js 18+
+
+### Backend
+
+1. Create a MySQL database (or use Docker - see `docker-compose.yml`)
+2. Configure connection details via environment variables or `application.yml`:
+
+    ``` yaml
+    DB_HOST=localhost
+    DB_PORT=3306
+    DB_NAME=student_db
+    DB_USER=your user
+    DB_PASSWORD=your_password
+    ```
+
+3. Run the backend:
+
+    ``` txt
+    mvn spring-boot:run
+    ```
+
+Flyway runs all migrations automatically on startup.
+4. Confirm it's running: `http://localhost:8080/api/users` should return `[]` or a list of seeded users.
+
+### Frontend
+
+``` txt
+cd student-app-frontend
+npm install
+npm run dev
+```
+
+Runs on `http://localhost:5173` by default. The dev server expects the backend at `http://localhost:8080` - if you change backend port, update the API base URL in `src/api/client.ts`.
+
+### CORS
+
+The backend only accepts cross-origin requests from `http://localhost:5173`  by default (configured in `WebConfig`). If your frontend runs on a different port, update`allowedOrigins` there and restart the backend.
