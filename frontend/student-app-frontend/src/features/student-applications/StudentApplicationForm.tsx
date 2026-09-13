@@ -108,6 +108,7 @@ function StudentApplicationForm({
 					<Field.Root>
 						<Field.Label>Personal Statement</Field.Label>
 						<Input
+							type="text"
 							value={personalStatement}
 							placeholder="Personal Statement"
 							onChange={(event) => {

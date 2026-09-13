@@ -126,6 +126,7 @@ function CourseForm({
 					<Field.Root>
 						<Field.Label>Course Title</Field.Label>
 						<Input
+							type="text"
 							value={title}
 							placeholder="Course Title"
 							onChange={(event) => {
@@ -145,6 +146,7 @@ function CourseForm({
 					<Field.Root>
 						<Field.Label>Course Description</Field.Label>
 						<Input
+							type="text"
 							value={description}
 							placeholder="Course Description"
 							onChange={(event) => {
@@ -164,6 +166,7 @@ function CourseForm({
 					<Field.Root>
 						<Field.Label>Category</Field.Label>
 						<Input
+							type="text"
 							value={category}
 							placeholder="Category"
 							onChange={(event) => {

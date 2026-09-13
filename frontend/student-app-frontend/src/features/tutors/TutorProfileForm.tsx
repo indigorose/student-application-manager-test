@@ -97,6 +97,7 @@ function TutorProfileForm({
 					<Field.Root>
 						<Field.Label>First Name</Field.Label>
 						<Input
+							type="text"
 							value={firstName}
 							onChange={(event) => {
 								setFirstName(event.target.value);
@@ -116,6 +117,7 @@ function TutorProfileForm({
 					<Field.Root>
 						<Field.Label>Last Name</Field.Label>
 						<Input
+							type="text"
 							value={lastName}
 							onChange={(event) => {
 								setLastName(event.target.value);
@@ -134,6 +136,7 @@ function TutorProfileForm({
 					<Field.Root>
 						<Field.Label>Department</Field.Label>
 						<Input
+							type="text"
 							value={department}
 							onChange={(event) => {
 								setDepartment(event.target.value);
