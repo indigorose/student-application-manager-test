@@ -115,7 +115,9 @@ An `activate` endpoint reverses this.
 3. Run the backend:
 
     ``` txt
+    docker compose up mysql -d
     mvn spring-boot:run
+    docker compose down
     ```
 
 Flyway runs all migrations automatically on startup.
