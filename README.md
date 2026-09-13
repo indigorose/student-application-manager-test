@@ -155,3 +155,18 @@ frontend/student-app-frontend/src/
     ├── courses/
     └── applications/
 ```
+
+## Known Limitations
+
+This is a demo build, not production-ready. The following are deliberately out-off-scope:
+
+- **No authentication or authorisation**. Role -based restrictions (e.g. "only a tutor can approve an application) are enforced by which buttons the frontend shows, not by the backend verifying who's calling. Anyone with the API URL can call any endpoint.
+- **No Sponsor/funding functionality yet**. The original design included a Sponsor role (budget management, funding request) - not implemented at this stage.
+- **Passwords are stored as provided**. They are temporary and for concept ideas only, further live deployment will feature encryption.
+
+## Possible next steps
+
+- Add real authentication and enforce role check on the server side.
+- Build out the Sponsor role and funding request workflow.
+- Add pagination to list endpoints as data volume grows.
+- Add automated tests.
