@@ -1,16 +1,27 @@
 # Student Application Manager
 
-## Contents
-
-- [Introduction](#introduction)
-- [Teck Stack](#tech-stack)
-- [Demo](#how-the-demo-works)
-- [Data Model](#data-model)
-
 ## Introduction
 
 A demo application modeling teh core workflow of a student application system: a **student** applies to a **Course**, a **Tutor** reviews and approves/rejects it and an **Admin** oversees all users and activity.
 This build intentionally has **no authentication**. It's designed to demonstrate the interaction between role - the frontend includes a role switcher so you can view the app as any Student, Tutor or Admin without logging in.
+
+## Contents
+
+- [Teck Stack](#tech-stack)
+- [Demo](#how-the-demo-works)
+- [Data Model](#data-model)
+- [Application State Machine](#application-state-machine)
+- [Courses](#courses)
+- [Soft Delete](#soft-delete)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Backend](#backend)
+  - [Frontend](#frontend)
+  - [CORS](#cors)
+- [API Documentation](#api-documentation)
+- [Project Structure](#project-structure)
+- [Known Limitations](#known-limitations)
+- [Possible Next Steps](#possible-next-steps)
 
 ## Tech Stack
 
