@@ -42,9 +42,36 @@ users (id, email, password, role, is_active, created_at, updated_at)
   ├── tutors   (id, user_id → users.id, first_name, last_name, department)
   └── (admin has no separate profile table - role alone is sufficient)
 
-courses (id, tutor_id -> tutors.id, title, description, category, capacity, start_date)
-applications (id, student_id -> students.id, module_id -> course.id, status, personal_statement, submitted_at, reviewed_at)
+courses (id, tutor_id → tutors.id, title, description, category, capacity, start_date)
+applications (id, student_id → students.id, module_id → course.id, status, personal_statement, submitted_at, reviewed_at)
 
 ```
 
 `students`, `tutors` and `applications` all have their **own** auto-increment primary key, separate from the `user_id`/`student_id`/`course_id` foreign keys they carry - please note this as when ready API responses, since a `Student`'s own `id` is not the same number as the `Student.user.id`.
+
+## Application State Machine
+
+``` ASCII
+create → DRAFT ⇄ SUBMITTED →  (tutor reviews) → APPROVED/REJECTED
+```
+
+- A new application always starts in `DRAFT`.
+-`DRAFT ⇄ SUBMITTED` is always reversible - a student can submit and then pull it back to draft to make changes, then resubmit.
+- Only a `SUBMITTED` application can be approved or rejected by a tutor.
+- `APPROVED` / `REJECTED` are terminal - there are no paths back from them.
+
+## Courses
+
+Tutors also have the ability to create and withdraw courses. There is an additional check that restricts course withdrawal if active applications are on file.
+
+This is a hard delete and courses must be resubmitted to be viewed universally across the app.
+
+## Soft Delete
+
+Users are never hard deleted. `DELETE`-style actions set `is_active = false` instead.
+
+Deactivated users:
+
+- disappear from default list/search endpoints(`GET /api/users`, `?role=`, `?email=`)
+- can no longer have a new Student/Tutor profile created against their account
+- can no longer submit new applications if they're a deactivated student.
