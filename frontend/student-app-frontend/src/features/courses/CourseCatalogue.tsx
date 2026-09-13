@@ -3,6 +3,8 @@ import useApi from '../../hooks/useApi';
 import { coursesApi } from '../../api/coursesApi';
 import type { Course } from '../../types/course';
 
+import { Box, Heading, Text, SimpleGrid } from '@chakra-ui/react';
+
 function CourseCatalogue() {
 	const { state } = useApi<Course[]>(() => coursesApi.getAllCourses());
 
@@ -13,13 +15,26 @@ function CourseCatalogue() {
 		return <p className="error">{state.error.message}</p>;
 	}
 	return (
-		<ul>
+		<SimpleGrid>
 			{state.data.map((course) => (
-				<li key={course.id}>
-					Course: {course.title} - Category: {course.category}
-				</li>
+				<Box
+					mt={4}
+					borderWidth={1}
+					borderRadius="md"
+					p={4}
+					key={course.id}
+				>
+					<Heading size="sm">{course.title}</Heading>
+					<Text>{course.description}</Text>
+					<Text>Category: {course.category}</Text>
+					<Text>Capacity: {course.capacity}</Text>
+					<Text>
+						Tutor: {course.tutor.firstName} {course.tutor.lastName}
+					</Text>
+					<Text>Starts: {course.startDate}</Text>
+				</Box>
 			))}
-		</ul>
+		</SimpleGrid>
 	);
 }
 
