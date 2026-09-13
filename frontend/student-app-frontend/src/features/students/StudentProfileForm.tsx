@@ -85,11 +85,14 @@ function StudentProfileForm({
 					address,
 				});
 			}
-			setFirstName('');
-			setLastName('');
-			setDob('');
-			setPhone('');
-			setAddress('');
+			if (!existingStudent) {
+				setFirstName('');
+				setLastName('');
+				setDob('');
+				setPhone('');
+				setAddress('');
+			}
+
 			onCreated();
 		} finally {
 			setIsSubmitting(false);
@@ -113,6 +116,7 @@ function StudentProfileForm({
 					<Field.Root>
 						<Field.Label>First Name</Field.Label>
 						<Input
+							type="text"
 							value={firstName}
 							onChange={(event) => {
 								setFirstName(event.target.value);
@@ -132,6 +136,7 @@ function StudentProfileForm({
 					<Field.Root>
 						<Field.Label>Last Name</Field.Label>
 						<Input
+							type="text"
 							value={lastName}
 							onChange={(event) => {
 								setLastName(event.target.value);
@@ -150,6 +155,7 @@ function StudentProfileForm({
 					<Field.Root>
 						<Field.Label>Date of Birth</Field.Label>
 						<Input
+							type="date"
 							value={dob}
 							onChange={(event) => {
 								setDob(event.target.value);
@@ -168,6 +174,7 @@ function StudentProfileForm({
 					<Field.Root>
 						<Field.Label>Phone</Field.Label>
 						<Input
+							type="text"
 							value={phone}
 							onChange={(event) => {
 								setPhone(event.target.value);
@@ -186,6 +193,7 @@ function StudentProfileForm({
 					<Field.Root>
 						<Field.Label>Address</Field.Label>
 						<Input
+							type="text"
 							value={address}
 							onChange={(event) => {
 								setAddress(event.target.value);
