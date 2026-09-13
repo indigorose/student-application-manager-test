@@ -9,6 +9,7 @@ import {
 	Stack,
 	Field,
 } from '@chakra-ui/react';
+import { PasswordInput } from '@/components/ui/password-input';
 interface CreateUserFormProps {
 	onSubmitForm: () => void;
 }
@@ -30,7 +31,7 @@ function CreateUserForm({ onSubmitForm }: CreateUserFormProps) {
 			errors.email = 'Email is required.';
 		}
 		if (!passwordExpression.test(password)) {
-			errors.password = 'This password is not strong enough.';
+			errors.password = 'This password is not strong enough';
 		}
 		return errors;
 	}
@@ -65,13 +66,7 @@ function CreateUserForm({ onSubmitForm }: CreateUserFormProps) {
 	return (
 		<>
 			<form onSubmit={handleSubmit} className="userForm">
-				<Fieldset.Root
-					size="md"
-					maxW="md"
-					mb="20px"
-					borderColor="red.400"
-					borderWidth="1px"
-				>
+				<Fieldset.Root size="md" maxW="md" mb="20px">
 					<Stack>
 						<Fieldset.Legend>Create a User</Fieldset.Legend>
 						<Fieldset.HelperText>
@@ -100,7 +95,7 @@ function CreateUserForm({ onSubmitForm }: CreateUserFormProps) {
 						</Field.Root>
 						<Field.Root>
 							<Field.Label>User Password</Field.Label>
-							<Input
+							<PasswordInput
 								value={password}
 								placeholder="************"
 								onChange={(event) => {
@@ -114,11 +109,21 @@ function CreateUserForm({ onSubmitForm }: CreateUserFormProps) {
 							{errors.password && (
 								<Field.HelperText color="red">
 									{errors.password}
+									<ul>
+										<li>At least 8 characters</li>
+										<li>At least one uppercase letter</li>
+										<li>At least one lowercase letter</li>
+										<li>At least one number</li>
+										<li>
+											At least one special character
+											(#?!@$%^&*-)
+										</li>
+									</ul>
 								</Field.HelperText>
 							)}
 						</Field.Root>
 						<Field.Root>
-							<Field.Label>Select a Role</Field.Label>
+							<Field.Label>Role</Field.Label>
 							<NativeSelect.Root width="320px">
 								<NativeSelect.Field
 									placeholder="Select a role"
