@@ -21,6 +21,7 @@ const BASE_URL = baseUrl('/users');
 
 export interface Api {
 	getAllUsers(): Promise<User[]>;
+	getAllUsersIncludingInactive(): Promise<User[]>;
 	getUsersByRole(role: Role): Promise<User[]>;
 	getUser(id: number): Promise<User | undefined>;
 	getUserByEmail(email: string): Promise<User | undefined>;
@@ -34,6 +35,13 @@ const usersApi: Api = {
 	// List all the users
 	async getAllUsers() {
 		return fetchJson<User[]>(BASE_URL, 'list all the users');
+	},
+	// List all the users including inactive
+	async getAllUsersIncludingInactive() {
+		return fetchJson<User[]>(
+			`${BASE_URL}/all`,
+			'List all the users including inactive',
+		);
 	},
 	// List users by role
 	async getUsersByRole(role: Role) {
@@ -82,7 +90,7 @@ const usersApi: Api = {
 		ensureOk(response, `deactivate user ${id}`);
 	},
 	async reactivateUser(id: number) {
-		const response = await fetch(`${BASE_URL}/${id}/reactivate`, {
+		const response = await fetch(`${BASE_URL}/${id}/activate`, {
 			method: 'PUT',
 		});
 		ensureOk(response, `reactivate user ${id}`);

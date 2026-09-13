@@ -31,10 +31,16 @@ public class UserController {
         this.userService = userService;
     }
 
-    // Get all the users
+    // Get all the active users
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    // Get all the users including inactive
+    @GetMapping("/all")
+    public ResponseEntity<List<User>> getAllUsersIncludingInactive() {
+        return ResponseEntity.ok(userService.getAllUsersIncludingInactive());
     }
 
     // Get single user by id

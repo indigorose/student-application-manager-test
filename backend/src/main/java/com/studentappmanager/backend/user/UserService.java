@@ -14,9 +14,14 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    // List all the users
+    // List all the active users
     public List<User> getAllUsers() {
         return userRepository.findByIsActiveTrue();
+    }
+
+    // List all the users including inactive
+    public List<User> getAllUsersIncludingInactive() {
+        return userRepository.findAll();
     }
 
     // List users by role

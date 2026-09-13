@@ -2,15 +2,29 @@ import { api } from '../../api/usersApi';
 import useApi from '../../hooks/useApi';
 import type { User } from '../../types/user';
 import CreateUserForm from './CreateUserForm';
-import { Button, Dialog, Table, Portal, Box, Heading } from '@chakra-ui/react';
+import {
+	Button,
+	Dialog,
+	Table,
+	Portal,
+	Box,
+	Heading,
+	Text,
+} from '@chakra-ui/react';
 import UpdateUserForm from './UpdateUserForm';
 import { useState } from 'react';
 
 function UserList() {
-	const { state, refreshData } = useApi<User[]>(() => api.getAllUsers());
+	const { state, refreshData } = useApi<User[]>(() =>
+		api.getAllUsersIncludingInactive(),
+	);
 	const [updatingUser, setUpdatingUser] = useState<User | null>(null);
 	async function handleDeactivate(userId: number) {
 		await api.deactivateUser(userId);
+		refreshData();
+	}
+	async function handleReactivate(userId: number) {
+		await api.reactivateUser(userId);
 		refreshData();
 	}
 
@@ -40,14 +54,29 @@ function UserList() {
 							<Table.ColumnHeader>Role</Table.ColumnHeader>
 							<Table.ColumnHeader>Email</Table.ColumnHeader>
 							<Table.ColumnHeader>Update</Table.ColumnHeader>
-							<Table.ColumnHeader>Deactivate</Table.ColumnHeader>
+							<Table.ColumnHeader>Activation</Table.ColumnHeader>
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
 						{state.data.map((user) => (
-							<Table.Row key={user.id}>
+							<Table.Row
+								key={user.id}
+								opacity={user.isActive ? 1 : 0.5}
+							>
 								<Table.Cell>{user.role}</Table.Cell>
-								<Table.Cell>{user.email}</Table.Cell>
+								<Table.Cell>
+									{user.email}{' '}
+									{!user.isActive && (
+										<Text
+											as="span"
+											color="gray.500"
+											ml={2}
+											fontSize="sm"
+										>
+											(inactive)
+										</Text>
+									)}
+								</Table.Cell>
 								<Table.Cell>
 									<Button
 										onClick={() => setUpdatingUser(user)}
@@ -56,13 +85,23 @@ function UserList() {
 									</Button>
 								</Table.Cell>
 								<Table.Cell>
-									<Button
-										onClick={() =>
-											handleDeactivate(user.id)
-										}
-									>
-										Deactivate
-									</Button>
+									{user.isActive ? (
+										<Button
+											onClick={() =>
+												handleDeactivate(user.id)
+											}
+										>
+											Deactivate
+										</Button>
+									) : (
+										<Button
+											onClick={() =>
+												handleReactivate(user.id)
+											}
+										>
+											Reactivate
+										</Button>
+									)}
 								</Table.Cell>
 							</Table.Row>
 						))}
