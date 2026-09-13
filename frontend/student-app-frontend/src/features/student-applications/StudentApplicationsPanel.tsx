@@ -70,8 +70,6 @@ function StudentApplicationsPanel({ studentUserId }: Props) {
 											Return to Draft
 										</Button>
 									)}
-								</Table.Cell>
-								<Table.Cell>
 									{app.status === 'DRAFT' && (
 										<>
 											<Button
@@ -79,15 +77,7 @@ function StudentApplicationsPanel({ studentUserId }: Props) {
 													setEditingApplication(app)
 												}
 											>
-												Update
-											</Button>
-											<Button
-												colorPalette="blue"
-												onClick={() =>
-													handleSubmitDraft(app.id)
-												}
-											>
-												Submit
+												Edit
 											</Button>
 											<Dialog.Root
 												open={
@@ -100,28 +90,44 @@ function StudentApplicationsPanel({ studentUserId }: Props) {
 											>
 												<Portal>
 													<Dialog.Backdrop />
-													<Dialog.Content>
-														<Dialog.Header>
-															Edit Application
-														</Dialog.Header>
-														<Dialog.Body>
-															{editingApplication && (
-																<EditApplicationForm
-																	application={
-																		editingApplication
-																	}
-																	onUpdated={() => {
-																		setEditingApplication(
-																			null,
-																		);
-																		refreshData();
-																	}}
-																/>
-															)}
-														</Dialog.Body>
-													</Dialog.Content>
+													<Dialog.Positioner>
+														<Dialog.Content>
+															<Dialog.Header>
+																Edit Application
+															</Dialog.Header>
+															<Dialog.Body>
+																{editingApplication && (
+																	<EditApplicationForm
+																		application={
+																			editingApplication
+																		}
+																		onUpdated={() => {
+																			setEditingApplication(
+																				null,
+																			);
+																			refreshData();
+																		}}
+																	/>
+																)}
+															</Dialog.Body>
+														</Dialog.Content>
+													</Dialog.Positioner>
 												</Portal>
 											</Dialog.Root>
+										</>
+									)}
+								</Table.Cell>
+								<Table.Cell>
+									{app.status === 'DRAFT' && (
+										<>
+											<Button
+												colorPalette="blue"
+												onClick={() =>
+													handleSubmitDraft(app.id)
+												}
+											>
+												Submit
+											</Button>
 										</>
 									)}
 								</Table.Cell>
