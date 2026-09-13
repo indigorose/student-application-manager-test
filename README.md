@@ -2,8 +2,9 @@
 
 ## Introduction
 
-A demo application modeling teh core workflow of a student application system: a **student** applies to a **Course**, a **Tutor** reviews and approves/rejects it and an **Admin** oversees all users and activity.
-This build intentionally has **no authentication**. It's designed to demonstrate the interaction between role - the frontend includes a role switcher so you can view the app as any Student, Tutor or Admin without logging in.
+A demo application modeling the core workflow of a student application system: a **Student** applies to a **Course**, a **Tutor** reviews and approves/rejects it and an **Admin** oversees all users and activity.
+
+This build intentionally has **no authentication/authorisation**. It is designed to demonstrate the interaction between roles - the frontend includes a role switcher so you can view the app as any Student, Tutor or Admin without logging in.
 
 ## Contents
 
@@ -29,7 +30,7 @@ This build intentionally has **no authentication**. It's designed to demonstrate
 | ----------------- | ---------------------------------- |
 | Backend           | Java, Spring Boot, Spring Data JPA |
 | Database          | MySQL, Flyway migrations           |
-| Frontend          | React, Typescript, Vite            |
+| Frontend          | React, TypeScript, Vite            |
 | UI                | Chakra UI                          |
 | API documentation | springdoc-openapi (Swagger UI)     |
 
@@ -38,7 +39,7 @@ This build intentionally has **no authentication**. It's designed to demonstrate
 There is no login, instead:
 
 1. The home page provides a **role selector** (Student / Tutor / Admin)
-2. Choosing Student or Tutor opens a **picker** listing every active user with that role, fetched live from the backend.
+2. Choosing a Student or Tutor opens a **picker** listing every active user with that role, fetched live from the backend.
 3. Selecting a person opens their dashboard, "acting as" that user for the rest of the session.
 4. Admin has no picker - there is only one admin view, showing everything across the system.
 
@@ -58,24 +59,24 @@ applications (id, student_id → students.id, module_id → course.id, status, p
 
 ```
 
-`students`, `tutors` and `applications` all have their **own** auto-increment primary key, separate from the `user_id`/`student_id`/`course_id` foreign keys they carry - please note this as when ready API responses, since a `Student`'s own `id` is not the same number as the `Student.user.id`.
+`students`, `tutors` and `applications` all have their **own** auto-increment primary key, separate from the `user_id`/`student_id`/`course_id` foreign keys they carry - please note this when reading API responses, since a `Student`'s own `id` is not the same number as the `Student.user.id`.
 
 ## Application State Machine
 
 ``` ASCII
-create → DRAFT ⇄ SUBMITTED →  (tutor reviews) → APPROVED/REJECTED
+create → DRAFT ⇄ SUBMITTED → (tutor reviews) → APPROVED/REJECTED
 ```
 
 - A new application always starts in `DRAFT`.
--`DRAFT ⇄ SUBMITTED` is always reversible - a student can submit and then pull it back to draft to make changes, then resubmit.
+- `DRAFT ⇄ SUBMITTED` is always reversible - a student can submit and then pull it back to draft to make changes, then resubmit.
 - Only a `SUBMITTED` application can be approved or rejected by a tutor.
 - `APPROVED` / `REJECTED` are terminal - there are no paths back from them.
 
 ## Courses
 
-Tutors also have the ability to create and withdraw courses. There is an additional check that restricts course withdrawal if active applications are on file.
+Tutors also have the ability to create, edit and withdraw courses. There is an additional check that restricts course withdrawal if active applications are on file.
 
-This is a hard delete and courses must be resubmitted to be viewed universally across the app.
+Course withdrawals are hard deletes and courses must be resubmitted to be viewed universally across the app.
 
 ## Soft Delete
 
@@ -118,7 +119,7 @@ An `activate` endpoint reverses this.
     ```
 
 Flyway runs all migrations automatically on startup.
-4. Confirm it's running: `http://localhost:8080/api/users` should return `[]` or a list of seeded users.
+4. Confirm it is running: `http://localhost:8080/api/users` should return `[]` or a list of seeded users.
 
 ### Frontend
 
@@ -128,11 +129,11 @@ npm install
 npm run dev
 ```
 
-Runs on `http://localhost:5173` by default. The dev server expects the backend at `http://localhost:8080` - if you change backend port, update the API base URL in `src/api/client.ts`.
+Runs on `http://localhost:5173` by default. The dev server expects the backend at `http://localhost:8080` - if you change the backend port, update the API base URL in `src/api/client.ts`.
 
 ### CORS
 
-The backend only accepts cross-origin requests from `http://localhost:5173`  by default (configured in `WebConfig`). If your frontend runs on a different port, update`allowedOrigins` there and restart the backend.
+The backend only accepts cross-origin requests from `http://localhost:5173` by default (configured in `WebConfig`). If your frontend runs on a different port, update `allowedOrigins` there and restart the backend.
 
 ## API documentation
 
@@ -169,15 +170,16 @@ frontend/student-app-frontend/src/
 
 ## Known Limitations
 
-This is a demo build, not production-ready. The following are deliberately out-off-scope:
+This is a demo build, not production-ready. The following are deliberately out-of-scope:
 
-- **No authentication or authorisation**. Role -based restrictions (e.g. "only a tutor can approve an application) are enforced by which buttons the frontend shows, not by the backend verifying who's calling. Anyone with the API URL can call any endpoint.
-- **No Sponsor/funding functionality yet**. The original design included a Sponsor role (budget management, funding request) - not implemented at this stage.
+- **No authentication or authorisation**. Role-based restrictions (e.g. "only a tutor can approve an application") are enforced by which buttons the frontend shows, not by the backend verifying who's calling. Anyone with the API URL can call any endpoint.
+- **No Sponsor/funding functionality yet**. The original ideas included a Sponsor role (budget management, funding request) - not implemented at this stage.
 - **Passwords are stored as provided**. They are temporary and for concept ideas only, further live deployment will feature encryption.
 
 ## Possible next steps
 
-- Add real authentication and enforce role check on the server side.
+- Add real authentication/authorisation with security checks and enforce role check on the server side.
+- Add additional and detailed search queries.
 - Build out the Sponsor role and funding request workflow.
 - Add pagination to list endpoints as data volume grows.
 - Add automated tests.
