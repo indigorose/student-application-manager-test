@@ -2,11 +2,11 @@
 import StudentApplicationForm from './StudentApplicationForm';
 import useApi from '../../hooks/useApi';
 import { studentApplicationsApi } from '../../api/studentApplicationApi';
-import ApplicationCard from '../../components/ApplicationCard';
 import { useState } from 'react';
 import type { StudentApplication } from '@/types/studentApplication';
-import { Button, Dialog, Portal } from '@chakra-ui/react';
+import { Table, Button, Dialog, Portal } from '@chakra-ui/react';
 import EditApplicationForm from './EditApplicationForm';
+
 interface Props {
 	studentUserId: number;
 }
@@ -36,64 +36,100 @@ function StudentApplicationsPanel({ studentUserId }: Props) {
 				onCreated={refreshData}
 			/>
 			{state.status === 'success' && (
-				<ul>
-					{state.data.map((app) => (
-						<li key={app.id}>
-							<ApplicationCard application={app} />
-							{app.status === 'SUBMITTED' && (
-								<Button
-									onClick={() => handleReturnToDraft(app.id)}
-								>
-									Return to Draft
-								</Button>
-							)}
-							{app.status === 'DRAFT' && (
-								<>
-									<Button
-										onClick={() =>
-											setEditingApplication(app)
-										}
-									>
-										Update
-									</Button>
-									<Button
-										colorPalette="blue"
-										onClick={() =>
-											handleSubmitDraft(app.id)
-										}
-									>
-										Submit
-									</Button>
-								</>
-							)}
-						</li>
-					))}
-				</ul>
+				<Table.Root>
+					<Table.Header>
+						<Table.Row>
+							<Table.ColumnHeader>Course</Table.ColumnHeader>
+							<Table.ColumnHeader>
+								Application Status
+							</Table.ColumnHeader>
+							<Table.ColumnHeader>
+								Personal Statement
+							</Table.ColumnHeader>
+							<Table.ColumnHeader>
+								Change Application Status
+							</Table.ColumnHeader>
+							<Table.ColumnHeader>
+								Submit Application
+							</Table.ColumnHeader>
+						</Table.Row>
+					</Table.Header>
+					<Table.Body>
+						{state.data.map((app) => (
+							<Table.Row key={app.id}>
+								<Table.Cell>{app.course.title}</Table.Cell>
+								<Table.Cell>{app.status}</Table.Cell>
+								<Table.Cell>{app.personalStatement}</Table.Cell>
+								<Table.Cell>
+									{app.status === 'SUBMITTED' && (
+										<Button
+											onClick={() =>
+												handleReturnToDraft(app.id)
+											}
+										>
+											Return to Draft
+										</Button>
+									)}
+								</Table.Cell>
+								<Table.Cell>
+									{app.status === 'DRAFT' && (
+										<>
+											<Button
+												onClick={() =>
+													setEditingApplication(app)
+												}
+											>
+												Update
+											</Button>
+											<Button
+												colorPalette="blue"
+												onClick={() =>
+													handleSubmitDraft(app.id)
+												}
+											>
+												Submit
+											</Button>
+											<Dialog.Root
+												open={
+													editingApplication !== null
+												}
+												onOpenChange={(event) =>
+													!event.open &&
+													setEditingApplication(null)
+												}
+											>
+												<Portal>
+													<Dialog.Backdrop />
+													<Dialog.Content>
+														<Dialog.Header>
+															Edit Application
+														</Dialog.Header>
+														<Dialog.Body>
+															{editingApplication && (
+																<EditApplicationForm
+																	application={
+																		editingApplication
+																	}
+																	onUpdated={() => {
+																		setEditingApplication(
+																			null,
+																		);
+																		refreshData();
+																	}}
+																/>
+															)}
+														</Dialog.Body>
+													</Dialog.Content>
+												</Portal>
+											</Dialog.Root>
+										</>
+									)}
+								</Table.Cell>
+							</Table.Row>
+						))}
+					</Table.Body>
+				</Table.Root>
 			)}
-			<Dialog.Root
-				open={editingApplication !== null}
-				onOpenChange={(event) =>
-					!event.open && setEditingApplication(null)
-				}
-			>
-				<Portal>
-					<Dialog.Backdrop />
-					<Dialog.Content>
-						<Dialog.Header>Edit Application</Dialog.Header>
-						<Dialog.Body>
-							{editingApplication && (
-								<EditApplicationForm
-									application={editingApplication}
-									onUpdated={() => {
-										setEditingApplication(null);
-										refreshData();
-									}}
-								/>
-							)}
-						</Dialog.Body>
-					</Dialog.Content>
-				</Portal>
-			</Dialog.Root>
 		</div>
 	);
 }
